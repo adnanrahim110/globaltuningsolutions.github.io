@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 02, 2024 at 12:17 AM
+-- Generation Time: Sep 10, 2024 at 05:39 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `u694204903_tunning`
+-- Database: `tunning`
 --
 
 -- --------------------------------------------------------
@@ -36,11 +36,13 @@ CREATE TABLE `users` (
   `password` varchar(255) NOT NULL,
   `phone` varchar(100) DEFAULT NULL,
   `country` int(11) DEFAULT NULL,
-  `account_type` varchar(20) DEFAULT NULL,
+  `profile_pic` varchar(2255) DEFAULT NULL,
   `city` varchar(25) DEFAULT NULL,
   `street` varchar(100) DEFAULT NULL,
   `postcode` varchar(20) NOT NULL,
   `role_as` int(1) NOT NULL DEFAULT 0 COMMENT '1 = Admin,0 = User',
+  `verify_token` varchar(255) NOT NULL,
+  `verify_status` tinyint(2) NOT NULL DEFAULT 0 COMMENT '0 = not verified, 1 = verified',
   `added_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -48,9 +50,9 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `fname`, `lname`, `username`, `email`, `password`, `phone`, `country`, `account_type`, `city`, `street`, `postcode`, `role_as`, `added_at`) VALUES
-(1, 'Admin', NULL, 'admin@gmail.com', 'admin@gmail.com', 'admin', '+923156154630', NULL, NULL, NULL, NULL, '', 1, '2024-09-01 21:23:36'),
-(5, 'User', NULL, 'user', 'user@gmail.com', 'user', '0436477955', 14, 'personal', 'Miranda', '1/19-21 Miranda Road', '2228', 0, '2024-09-01 21:23:36');
+INSERT INTO `users` (`id`, `fname`, `lname`, `username`, `email`, `password`, `phone`, `country`, `profile_pic`, `city`, `street`, `postcode`, `role_as`, `verify_token`, `verify_status`, `added_at`) VALUES
+(7, 'Adnan', 'Rahim', 'adnan', 'adnankaka.786110@gmail.com', '$2y$10$c5Mf1YLRaz9hItUhEy0uP.RMJBAgD6J7hyutMlTEJgqEKryu7lftG', '02032948394', NULL, NULL, NULL, NULL, '', 1, '221bb9928474600ca58f55ffce5967d6', 1, '2024-09-05 20:40:59'),
+(8, 'Adnan', 'Rahim', 'adnan1', 'arkaka0092@gmail.com', '$2y$10$XtY7Vk83jWuF4hJLFDEmLuGvq99i6MGajOD9v2Jw8DerEE8M7bMoy', '02032948394', NULL, NULL, NULL, NULL, '', 0, '5c1274f604813d971ec70705d82840f2', 1, '2024-09-07 18:53:44');
 
 --
 -- Indexes for dumped tables
@@ -70,7 +72,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

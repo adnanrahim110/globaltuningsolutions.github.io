@@ -6,7 +6,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
-	<title>Register - GLOBAL TUNING SOLUTIONS</title>
+	<title>Register - Global Tuning Solutions</title>
 
 	<link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700&display=swap" rel="stylesheet">
 
@@ -45,16 +45,22 @@
 					</div> -->
 					<?php
 					if (isset($_SESSION['message'])) {
-						?>
+						// Get message and message type
+						$message = $_SESSION['message'];
+						$messageType = isset($_SESSION['message_type']) ? $_SESSION['message_type'] : 'warning'; // Default to 'warning'
+
+					?>
 						<center>
 							<div style="max-width: 400px;"
-								class="text-center alert alert-warning alert-dismissable fade show" role="alert">
-								<strong>Hey!</strong> <?= $_SESSION['message']; ?>.
+								class="text-center alert alert-<?= $messageType; ?> alert-dismissable fade show" role="alert">
+								<strong>Hey!</strong> <?= $message; ?>.
 								<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 							</div>
 						</center>
-						<?php
+					<?php
+						// Unset the session variables to avoid displaying the message again
 						unset($_SESSION['message']);
+						unset($_SESSION['message_type']);
 					}
 					?>
 					<form id="signInForm" class="geex-content__authentication__form" action="config/auth.php" method="post">
@@ -68,48 +74,43 @@
 							</div>
 							<div class="col-md-6">
 								<div class="geex-content__authentication__form-group">
-									<input type="text" id="lname" name="lname" placeholder="Your Last Name"
-										required>
+									<input type="text" id="lname" name="lname" placeholder="Your Last Name" required>
 									<i class="uil-user"></i>
 								</div>
 							</div>
 							<div class="col-12">
 								<div class="geex-content__authentication__form-group">
-									<input type="email" id="emailSignIn" name="email" placeholder="Your Email"
-										required>
+									<input type="email" id="emailSignIn" name="email" placeholder="Your Email" required>
 									<i class="uil-envelope"></i>
 								</div>
 							</div>
 							<div class="col-12">
 								<div class="geex-content__authentication__form-group">
-									<input type="tel" id="phone" name="phone" placeholder="Your Phone Number"
-										required>
+									<input type="tel" id="phone" name="phone" placeholder="Your Phone Number" required>
 									<i class="uil-envelope"></i>
 								</div>
 							</div>
 							<div class="col-12 col-md-6">
 								<div class="geex-content__authentication__form-group">
-									<input type="password" id="loginPassword" name="password"
-										placeholder="Password" required>
+									<input type="password" id="loginPassword" name="password" placeholder="Password" required>
 									<i class="uil-eye toggle-password-type"></i>
 								</div>
 							</div>
 							<div class="col-12 col-md-6">
 								<div class="geex-content__authentication__form-group">
-									<input type="password" id="loginPassword" name="cpassword"
-										placeholder="Confirm Password" required>
+									<input type="password" id="loginPassword" name="cpassword" placeholder="Confirm Password" required>
 									<i class="uil-eye toggle-password-type"></i>
 								</div>
 							</div>
 							<div class="geex-content__authentication__form-group custom-checkbox">
-								<input type="checkbox" class="geex-content__authentication__checkbox-input"
-									id="rememberMe">
+								<input type="checkbox" class="geex-content__authentication__checkbox-input" id="rememberMe">
 								<label class="geex-content__authentication__checkbox-label" for="rememberMe">By creating
 									a account you agree to Our <a href="#">terms & conditions Privacy Policy</a></label>
 							</div>
 						</div>
-						<button type="submit" class="geex-content__authentication__form-submit" name="register_btn">Sign
-							Up</button>
+						<button type="submit" class="geex-content__authentication__form-submit" name="register_btn">
+							Sign Up
+						</button>
 						<div class="geex-content__authentication__form-footer">
 							already have an account? <a href="login.php">Sign In</a>
 						</div>

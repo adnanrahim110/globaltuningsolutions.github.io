@@ -1,153 +1,109 @@
+<?php
+// buy-credits.php
+
+// Include the database connection
+include('../config/dbconn.php');
+
+// Fetch data from the database
+$query = "SELECT * FROM credit_prices ORDER BY credits ASC";
+$result = $con->query($query);
+
+// Check if query was successful
+if (!$result) {
+	die("Error fetching data: " . $con->error);
+}
+?>
 <!doctype html>
 <html lang="en" dir="ltr">
-
-<?php $title = 'Buy Credits' ?>
-<?php $page_title = 'Buy Credits' ?>
-
-<?php include 'partials/head.php' ?>
+<?php
+$title = 'Buy Credits';
+$page_title = 'Buy Credits';
+include 'partials/head.php';
+?>
+<link rel="stylesheet" href="resources/css/mycss.css">
 
 <body class="geex-dashboard">
 
+  <main class="geex-main-content">
+    <?php include 'partials/sidebar.php'; ?>
+    <?php include 'partials/customizer.php'; ?>
 
-	<main class="geex-main-content">
+    <div class="geex-content">
+      <?php include 'partials/header.php'; ?>
 
-		<?php include 'partials/sidebar.php' ?>
+      <div class="geex-content__pricing">
+        <div class="geex-content__pricing__wrapper">
+          <div class="row justify-content-center">
+            <div class="col-12 col-lg-11 white-bg shadow p-5" style="border-radius: 24px;">
+              <div class="buy-credits-table">
+                <table class="table table-responsive table-bordered table-striped table-hover text-center">
+                  <thead class="table-primary">
+                    <tr>
+                      <th scope="col">Credits</th>
+                      <th scope="col">You Save</th>
+                      <th scope="col">Price</th>
+                      <th scope="col">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <?php
+										// Fetch the first row separately for credits = 1
+										$row1 = $result->fetch_assoc();
+										?>
+                    <tr>
+                      <td><?php echo $row1['credits']; ?></td>
+                      <td>0%</td> <!-- Fixed value for the first row -->
+                      <td>AUD <?php echo number_format($row1['price'], 2); ?></td>
+                      <td>
+                        <form action="payment.php" method="POST">
+                          <input type="hidden" name="credits" value="<?php echo $row1['credits']; ?>">
+                          <input type="hidden" name="price" value="<?php echo $row1['price']; ?>">
+                          <input type="hidden" name="save" value="0">
+                          <button type="submit" class="btn btn-primary btn-sm lh-sm">Buy Now</button>
+                        </form>
+                      </td>
+                    </tr>
 
-		<?php include 'partials/customizer.php' ?>
+                    <?php
+										while ($row = $result->fetch_assoc()) {
+										?>
+                    <tr>
+                      <td><?php echo $row['credits']; ?></td>
+                      <td>
+                        <?php
+													$original_total = $row1['price'] * $row['credits'];
+													$you_save = (($original_total - $row['price']) / $original_total) * 100;
+													echo round($you_save, 2) . '%';
+													?>
+                      </td>
+                      <td>AUD <?php echo number_format($row['price'], 2); ?></td>
+                      <td>
+                        <form action="payment.php" method="POST">
+                          <input type="hidden" name="credits" value="<?php echo $row['credits']; ?>">
+                          <input type="hidden" name="price" value="<?php echo $row['price']; ?>">
+                          <input type="hidden" name="save" value="<?php echo round($you_save, 2); ?>">
+                          <button type="submit" class="btn btn-primary btn-sm lh-sm">Buy Now</button>
+                        </form>
+                      </td>
+                    </tr>
+                    <?php
+										}
+										// Free result set
+										$result->free();
+										?>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-		<div class="geex-content">
-			<?php include 'partials/header.php' ?>
-			<div class="geex-content__pricing">
-				<div class="geex-content__pricing__wrapper">
-					<div class="row">
-						<div class="col-lg-4 mb-40">
-							<div class="geex-content__pricing__single">
-								<div class="geex-content__pricing__header">
-									<span class="geex-content__pricing__badge">For One Project</span>
-									<div class="geex-content__pricing__tag">
-										<span class="geex-content__pricing__currency">
-											<svg xmlns="http://www.w3.org/2000/svg" width="17" height="24"
-												viewBox="0 0 17 24">
-												<g fill="none" fill-rule="evenodd">
-													<path stroke="#345469" stroke-width="2"
-														d="M16.078 5.922a8.596 8.596 0 1 0 0 12.156"></path>
-													<path fill="#345469"
-														d="M6 0h2v4H6zM11 0h2v4h-2zM6 20h2v4H6zM11 20h2v4h-2z"></path>
-												</g>
-											</svg>
-										</span>
-										<span class="geex-content__pricing__amount">&nbsp;50</span>
-										<span class="geex-content__pricing__period">€50.00 per file</span>
-									</div>
-									<span class="geex-content__pricing__subtitle">This package is perfect for one time
-										customers.</span>
-								</div>
-								<div class="geex-content__pricing__body">
-									<ul class="geex-content__pricing__feature">
-										<li class="geex-content__pricing__feature__list active">
-											<i class="uil-check"></i>
-											<span class="geex-content__pricing__feature__text">Price €50.00</span>
-										</li>
-										<li class="geex-content__pricing__feature__list active">
-											<i class="uil-check"></i>
-											<span class="geex-content__pricing__feature__text">1 File</span>
-										</li>
-									</ul>
-									<div class="geex-content__pricing__btn-part">
-										<a class="geex-content__pricing__btn" href="">Buy Credits</a>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="col-lg-4 mb-40">
-							<div class="geex-content__pricing__single active">
-								<div class="geex-content__pricing__header">
-									<span class="geex-content__pricing__badge">Most Popular</span>
-									<div class="geex-content__pricing__tag">
-										<span class="geex-content__pricing__currency">
-											<svg xmlns="http://www.w3.org/2000/svg" width="17" height="24"
-												viewBox="0 0 17 24">
-												<g fill="none" fill-rule="evenodd">
-													<path stroke="#345469" stroke-width="2"
-														d="M16.078 5.922a8.596 8.596 0 1 0 0 12.156"></path>
-													<path fill="#345469"
-														d="M6 0h2v4H6zM11 0h2v4h-2zM6 20h2v4H6zM11 20h2v4h-2z"></path>
-												</g>
-											</svg>
-										</span>
-										<span class="geex-content__pricing__amount">&nbsp;250</span>
-										<span class="geex-content__pricing__period">€40.00 per file</span>
-									</div>
-									<span class="geex-content__pricing__subtitle">
-									Enjoy 5 file service uses with this package.
-									</span>
-								</div>
-								<div class="geex-content__pricing__body">
-									<ul class="geex-content__pricing__feature">
-										<li class="geex-content__pricing__feature__list active">
-											<i class="uil-check"></i>
-											<span class="geex-content__pricing__feature__text">Price €225.00</span>
-										</li>
-										<li class="geex-content__pricing__feature__list active">
-											<i class="uil-check"></i>
-											<span class="geex-content__pricing__feature__text">5 Files</span>
-										</li>
-									</ul>
-									<div class="geex-content__pricing__btn-part">
-										<a class="geex-content__pricing__btn" href="">Buy Credits</a>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="col-lg-4 mb-40">
-							<div class="geex-content__pricing__single">
-								<div class="geex-content__pricing__header">
-									<span class="geex-content__pricing__badge">Master Package</span>
-									<div class="geex-content__pricing__tag">
-										<span class="geex-content__pricing__currency">
-											<svg xmlns="http://www.w3.org/2000/svg" width="17" height="24"
-												viewBox="0 0 17 24">
-												<g fill="none" fill-rule="evenodd">
-													<path stroke="#345469" stroke-width="2"
-														d="M16.078 5.922a8.596 8.596 0 1 0 0 12.156"></path>
-													<path fill="#345469"
-														d="M6 0h2v4H6zM11 0h2v4h-2zM6 20h2v4H6zM11 20h2v4h-2z"></path>
-												</g>
-											</svg>
-										</span>
-										<span class="geex-content__pricing__amount">&nbsp;1000</span>
-										<span class="geex-content__pricing__period">€40.00 per file</span>
-									</div>
-									<span class="geex-content__pricing__subtitle">
-									Master package is great offer for your business.
-									</span>
-								</div>
-								<div class="geex-content__pricing__body">
-									<ul class="geex-content__pricing__feature">
-										<li class="geex-content__pricing__feature__list active">
-											<i class="uil-check"></i>
-											<span class="geex-content__pricing__feature__text">Price €800.00</span>
-										</li>
-										<li class="geex-content__pricing__feature__list active">
-											<i class="uil-check"></i>
-											<span class="geex-content__pricing__feature__text">20 Files</span>
-										</li>
-									</ul>
-									<div class="geex-content__pricing__btn-part">
-										<a class="geex-content__pricing__btn" href="">Buy Credits</a>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</main>
+  </main>
 
-	<!-- inject:js-->
-	<?php include 'partials/script.php' ?>
-	<!-- endinject-->
+  <?php include 'partials/script.php'; ?>
+
 </body>
 
 </html>

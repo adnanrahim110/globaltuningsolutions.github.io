@@ -1,60 +1,76 @@
-
 <?php
 $title = "DTC";
- include "includes/head.php"; 
+include "includes/head.php";
 ?>
+<?php
+include 'config/dbconn.php';
+// Fetch brands from the database
+$brand_query = "SELECT * FROM brands";
+$brand_query_run = mysqli_query($con, $brand_query);
+
+if (mysqli_num_rows($brand_query_run) > 0) {
+  while ($row = mysqli_fetch_assoc($brand_query_run)) {
+    $brands[] = $row;
+  }
+}
+?>
+
 <body>
-    <?php include "includes/navbar.php"; ?>
-    <main>
-        <section class="dtc-sec">
-            <div class="container">
-                <div class="row justify-content-center mt-5">
-                    <div class="col-10">
-                        <form action="" class="dtc-form">
-                            <h3 class="sec-heading">Search By Code</h3>
-                            <div class="row mt-4 align-items-end">
-                                <div class="col-6 col-md-4">
-                                    <div class="form-group">
-                                        <label for="make">Select Make:</label>
-                                        <span class="form-arrow"><i class="bx bx-chevron-down"></i></span>
-                                        <select name="make" id="make" class="dropdown">
-                                            <option value="Select Make" disabled selected>Select Make</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-6 col-md-4">
-                                    <div class="form-group">
-                                        <label for="make">Code:</label>
-                                        <input type="text" class="form-control" placeholder="Example: P3400">
-                                    </div>
-                                </div>
-                                <div class="col-6 col-md-4">
-                                    <button class="main-btn btn">Search</button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
+  <?php include "includes/navbar.php"; ?>
+  <main>
+    <section class="dtc-sec">
+      <div class="container">
+        <div class="row justify-content-center mt-5">
+          <div class="col-10">
+            <form action="" class="dtc-form">
+              <h3 class="sec-heading">Search By Code</h3>
+              <div class="row mt-4 align-items-end">
+                <div class="col-6 col-md-4">
+                  <div class="form-group">
+                    <label for="make">Select Make:</label>
+                    <select name="make" class="srch-slct">
+                      <option value="Select Make" disabled selected>Select Make</option>
+                      <?php
+                      foreach ($brands as $brand) {
+                        echo '<option value="' . $brand['id'] . '">' . $brand['name'] . '</option>';
+                      }
+                      ?>
+                    </select>
+                  </div>
                 </div>
-                <div class="row justify-content-center">
-                    <div class="col-12 col-lg-10">
-                        <table class="table table-lg table-borderless dtc-table table-hover">
-                            <thead>
-                                <tr class="heading">
-                                    <th colspan="6">
-                                        <h3 class="sec-heading">Recent Searches</h3>
-                                    </th>
-                                </tr>
-                                <tr>
-                                    <th scope="col" class="ps-3">ODB/DTC Code</th>
-                                    <th scope="col">Type</th>
-                                    <th scope="col">System</th>
-                                    <th scope="col">System Name</th>
-                                    <th scope="col">Module</th>
-                                    <th scope="col">Message</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <!-- <tr>
+                <div class="col-6 col-md-4">
+                  <div class="form-group">
+                    <label for="make">Code:</label>
+                    <input type="text" class="form-control" placeholder="Example: P3400">
+                  </div>
+                </div>
+                <div class="col-6 col-md-4">
+                  <button class="main-btn btn">Search</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="row justify-content-center">
+          <div class="col-12 col-lg-10">
+            <table class="table table-lg table-borderless dtc-table table-hover">
+              <thead>
+                <tr class="heading">
+                  <th colspan="6">
+                    <h3 class="sec-heading">Recent Searches</h3>
+                  </th>
+                </tr>
+                <tr>
+                  <th scope="col" class="ps-3">ODB/DTC Code</th>
+                  <th scope="col">Type</th>
+                  <th scope="col">System</th>
+                  <th scope="col">System Name</th>
+                  <th scope="col">Module</th>
+                  <th scope="col">Message</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- <tr>
                                 <td class="ps-3"></td>
                                 <td></td>
                                 <td></td>
@@ -62,177 +78,127 @@ $title = "DTC";
                                 <td></td>
                                 <td></td>
                             </tr> -->
-                                <tr>
-                                    <td colspan="6" class="text-center">No results found.</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-            </div>
-        </section>
-    </main>
-    <script>
-        const form = document.querySelector(".dtc-form");
-        const dropdowns = document.querySelectorAll(".dropdown");
+                <tr>
+                  <td colspan="6" class="text-center">No results found.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      </div>
+    </section>
+  </main>
 
-        // Check if Dropdowns are Exist
-        // Loop Dropdowns and Create Custom Dropdown for each Select Element
-        if (dropdowns.length > 0) {
-            dropdowns.forEach((dropdown) => {
-                createCustomDropdown(dropdown);
-            });
-        }
 
-        // Check if Form Element Exist on Page
-        if (form !== null) {
-            form.addEventListener("submit", (e) => {
-                e.preventDefault();
-            });
-        }
+  <?php include "includes/footer.php"; ?>
+  <script>
+  function create_custom_dropdowns() {
+    $('.srch-slct').each(function(i, select) {
+      if (!$(this).next().hasClass('dropdown-select')) {
+        $(this).after('<div class="dropdown-select wide ' + ($(this).attr('class') || '') +
+          '" tabindex="0"><span class="current"></span><div class="list"><ul></ul></div></div>');
+        var dropdown = $(this).next();
+        var options = $(select).find('option');
+        var selected = $(this).find('option:selected');
+        dropdown.find('.current').html(selected.data('display-text') || selected.text());
+        options.each(function(j, o) {
+          var display = $(o).data('display-text') || '';
+          dropdown.find('ul').append('<li class="option ' + ($(o).is(':selected') ? 'selected' : '') +
+            '" data-value="' + $(o).val() + '" data-display-text="' + display + '">' + $(o).text() + '</li>');
+        });
+      }
+    });
 
-        // Create Custom Dropdown
-        function createCustomDropdown(dropdown) {
-            // Get All Select Options
-            // And Convert them from NodeList to Array
-            const options = dropdown.querySelectorAll("option");
-            const optionsArr = Array.prototype.slice.call(options);
+    $('.dropdown-select ul').before(
+      '<div class="dd-search"><input id="txtSearchValue" autocomplete="off" onkeyup="filter()" class="dd-searchbox form-control w-100" type="text"></div>'
+    );
+  }
 
-            // Create Custom Dropdown Element and Add Class Dropdown
-            const customDropdown = document.createElement("div");
-            customDropdown.classList.add("dropdown");
-            dropdown.insertAdjacentElement("afterend", customDropdown);
+  // Event listeners
 
-            // Create Element for Selected Option
-            const selected = document.createElement("div");
-            selected.classList.add("dropdown-select");
-            selected.textContent = optionsArr[0].textContent;
-            customDropdown.appendChild(selected);
+  // Open/close
+  $(document).on('click', '.dropdown-select', function(event) {
+    if ($(event.target).hasClass('dd-searchbox')) {
+      return;
+    }
+    $('.dropdown-select').not($(this)).removeClass('open');
+    $(this).toggleClass('open');
+    if ($(this).hasClass('open')) {
+      $(this).find('.option').attr('tabindex', 0);
+      $(this).find('.selected').focus();
+    } else {
+      $(this).find('.option').removeAttr('tabindex');
+      $(this).focus();
+    }
+  });
 
-            // Create Element for Dropdown Menu
-            // Add Class and Append it to Custom Dropdown
-            const menu = document.createElement("div");
-            menu.classList.add("dropdown-menu");
-            customDropdown.appendChild(menu);
-            selected.addEventListener("click", toggleDropdown.bind(menu));
+  // Close when clicking outside
+  $(document).on('click', function(event) {
+    if ($(event.target).closest('.dropdown-select').length === 0) {
+      $('.dropdown-select').removeClass('open');
+      $('.dropdown-select .option').removeAttr('tabindex');
+    }
+    event.stopPropagation();
+  });
 
-            // Create Search Input Element
-            const search = document.createElement("input");
-            search.placeholder = "Search...";
-            search.type = "text";
-            search.classList.add("dropdown-menu-search");
-            menu.appendChild(search);
+  function filter() {
+    var valThis = $('#txtSearchValue').val();
+    $('.dropdown-select ul > li').each(function() {
+      var text = $(this).text();
+      (text.toLowerCase().indexOf(valThis.toLowerCase()) > -1) ? $(this).show(): $(this).hide();
+    });
+  };
+  // Search
 
-            // Create Wrapper Element for Menu Items
-            // Add Class and Append to Menu Element
-            const menuInnerWrapper = document.createElement("div");
-            menuInnerWrapper.classList.add("dropdown-menu-inner");
-            menu.appendChild(menuInnerWrapper);
+  // Option click
+  $(document).on('click', '.dropdown-select .option', function(event) {
+    $(this).closest('.list').find('.selected').removeClass('selected');
+    $(this).addClass('selected');
+    var text = $(this).data('display-text') || $(this).text();
+    $(this).closest('.dropdown-select').find('.current').text(text);
+    $(this).closest('.dropdown-select').prev('select').val($(this).data('value')).trigger('change');
+  });
 
-            // Loop All Options and Create Custom Option for Each Option
-            // And Append it to Inner Wrapper Element
-            optionsArr.forEach((option) => {
-                const item = document.createElement("div");
-                item.classList.add("dropdown-menu-item");
-                item.dataset.value = option.value;
-                item.textContent = option.textContent;
-                menuInnerWrapper.appendChild(item);
+  // Keyboard events
+  $(document).on('keydown', '.dropdown-select', function(event) {
+    var focused_option = $($(this).find('.list .option:focus')[0] || $(this).find('.list .option.selected')[0]);
+    // Space or Enter
+    //if (event.keyCode == 32 || event.keyCode == 13) {
+    if (event.keyCode == 13) {
+      if ($(this).hasClass('open')) {
+        focused_option.trigger('click');
+      } else {
+        $(this).trigger('click');
+      }
+      return false;
+      // Down
+    } else if (event.keyCode == 40) {
+      if (!$(this).hasClass('open')) {
+        $(this).trigger('click');
+      } else {
+        focused_option.next().focus();
+      }
+      return false;
+      // Up
+    } else if (event.keyCode == 38) {
+      if (!$(this).hasClass('open')) {
+        $(this).trigger('click');
+      } else {
+        var focused_option = $($(this).find('.list .option:focus')[0] || $(this).find('.list .option.selected')[0]);
+        focused_option.prev().focus();
+      }
+      return false;
+      // Esc
+    } else if (event.keyCode == 27) {
+      if ($(this).hasClass('open')) {
+        $(this).trigger('click');
+      }
+      return false;
+    }
+  });
 
-                item.addEventListener(
-                    "click",
-                    setSelected.bind(item, selected, dropdown, menu)
-                );
-            });
-
-            // Add Selected Class to First Custom Select Option
-            menuInnerWrapper.querySelector("div").classList.add("selected");
-
-            // Add Input Event to Search Input Element to Filter Items
-            // Add Click Event to Element to Close Custom Dropdown if Clicked Outside
-            // Hide the Original Dropdown(Select)
-            search.addEventListener("input", filterItems.bind(search, optionsArr, menu));
-            document.addEventListener(
-                "click",
-                closeIfClickedOutside.bind(customDropdown, menu)
-            );
-            dropdown.style.display = "none";
-        }
-
-        // Toggle for Display and Hide Dropdown
-        function toggleDropdown() {
-            if (this.offsetParent !== null) {
-                this.style.display = "none";
-            } else {
-                this.style.display = "block";
-                this.querySelector("input").focus();
-            }
-        }
-
-        // Set Selected Option
-        function setSelected(selected, dropdown, menu) {
-            // Get Value and Label from Clicked Custom Option
-            const value = this.dataset.value;
-            const label = this.textContent;
-
-            // Change the Text on Selected Element
-            // Change the Value on Select Field
-            selected.textContent = label;
-            dropdown.value = value;
-
-            // Close the Menu
-            // Reset Search Input Value
-            // Remove Selected Class from Previously Selected Option
-            // And Show All Div if they Were Filtered
-            // Add Selected Class to Clicked Option
-            menu.style.display = "none";
-            menu.querySelector("input").value = "";
-            menu.querySelectorAll("div").forEach((div) => {
-                if (div.classList.contains("is-select")) {
-                    div.classList.remove("is-select");
-                }
-                if (div.offsetParent === null) {
-                    div.style.display = "block";
-                }
-            });
-            this.classList.add("is-select");
-        }
-
-        // Filter the Items
-        function filterItems(itemsArr, menu) {
-            // Get All Custom Select Options
-            // Get Value of Search Input
-            // Get Filtered Items
-            // Get the Indexes of Filtered Items
-            const customOptions = menu.querySelectorAll(".dropdown-menu-inner div");
-            const value = this.value.toLowerCase();
-            const filteredItems = itemsArr.filter((item) =>
-                item.value.toLowerCase().includes(value)
-            );
-            const indexesArr = filteredItems.map((item) => itemsArr.indexOf(item));
-
-            // Check if Option is not Inside Indexes Array
-            // And Hide it and if it is Inside Indexes Array and it is Hidden Show it
-            itemsArr.forEach((option) => {
-                if (!indexesArr.includes(itemsArr.indexOf(option))) {
-                    customOptions[itemsArr.indexOf(option)].style.display = "none";
-                } else {
-                    if (customOptions[itemsArr.indexOf(option)].offsetParent === null) {
-                        customOptions[itemsArr.indexOf(option)].style.display = "block";
-                    }
-                }
-            });
-        }
-
-        // Close Dropdown if Clicked Outside Dropdown Element
-        function closeIfClickedOutside(menu, e) {
-            if (
-                e.target.closest(".dropdown") === null &&
-                e.target !== this &&
-                menu.offsetParent !== null
-            ) {
-                menu.style.display = "none";
-            }
-        }
-    </script>
-    <?php include "includes/footer.php"; ?>
+  $(document).ready(function() {
+    create_custom_dropdowns();
+  });
+  </script>

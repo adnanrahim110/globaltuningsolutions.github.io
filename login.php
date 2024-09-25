@@ -1,12 +1,18 @@
 <?php
-    session_start();
-    
-    if(isset($_SESSION['auth']))
-    {
+session_start();
+
+if (isset($_SESSION['auth'])) {
+    if ($_SESSION['role_as'] == 0) {
         $_SESSION['message'] = "You are already logged In";
-        header('location: index.php');
-        exit();
+        $_SESSION['message_type'] = 'warning';
+        header('location: user/dashboard.php');
+        exit(0);
+    } elseif ($_SESSION['role_as'] == 1) {
+        $_SESSION['message'] = "You are already logged In";
+        header('location: admin/dashboard.php');
+        exit(0);
     }
+}
 
 ?>
 <!doctype html>
@@ -57,31 +63,35 @@
                     </div> -->
                     <?php
                     if (isset($_SESSION['message'])) {
-                        ?>
+                        // Get message and message type
+                        $message = $_SESSION['message'];
+                        $messageType = isset($_SESSION['message_type']) ? $_SESSION['message_type'] : 'warning'; // Default to 'warning'
+
+                    ?>
                         <center>
                             <div style="max-width: 400px;"
-                                class="text-center alert alert-warning alert-dismissable fade show" role="alert">
-                                <strong>Hey!</strong> <?= $_SESSION['message']; ?>.
+                                class="text-center alert alert-<?= $messageType; ?> alert-dismissable fade show" role="alert">
+                                <strong>Hey!</strong> <?= $message; ?>.
                                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                             </div>
                         </center>
-                        <?php
+                    <?php
+                        // Unset the session variables to avoid displaying the message again
                         unset($_SESSION['message']);
+                        unset($_SESSION['message_type']);
                     }
                     ?>
-                    <form id="signInForm" class="geex-content__authentication__form" action="config/auth.php"
-                        method="post">
+                    <form id="signInForm" class="geex-content__authentication__form" action="config/auth.php" method="post">
                         <h2 class="geex-content__authentication__title">Sing In to Your Account 👋</h2>
                         <div class="geex-content__authentication__form-group">
                             <label for="emailSignIn">Your Email</label>
-                            <input type="email" id="emailSignIn" name="email" placeholder="Enter Your Email"
-                                required>
+                            <input type="email" id="emailSignIn" name="email" placeholder="Enter Your Email" required>
                             <i class="uil-envelope"></i>
                         </div>
                         <div class="geex-content__authentication__form-group">
                             <div class="geex-content__authentication__label-wrapper">
                                 <label for="loginPassword">Your Password</label>
-                                <a href="forgot-password.php">Forgot Password?</a>
+                                <a href="forgot-password">Forgot Password?</a>
                             </div>
                             <input type="password" id="loginPassword" name="password" placeholder="Password" required>
                             <i class="uil-eye toggle-password-type"></i>
@@ -94,7 +104,7 @@
                         <button type="submit" class="geex-content__authentication__form-submit" name="login_btn">Sign
                             In</button>
                         <div class="geex-content__authentication__form-footer">
-                            Doesn't have any account? <a href="register.php">Sign Up</a>
+                            Doesn't have any account? <a href="register">Sign Up</a>
                         </div>
                     </form>
                 </div>

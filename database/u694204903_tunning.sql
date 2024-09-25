@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 02, 2024 at 12:14 AM
+-- Generation Time: Sep 16, 2024 at 05:03 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `u694204903_tunning`
+-- Database: `tunning`
 --
 
 -- --------------------------------------------------------
@@ -110,11 +110,31 @@ INSERT INTO `brands` (`id`, `name`, `date`, `status`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `credit_prices`
+--
+
+CREATE TABLE `credit_prices` (
+  `id` int(11) NOT NULL,
+  `credits` int(11) NOT NULL,
+  `price` decimal(10,2) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `credit_prices`
+--
+
+INSERT INTO `credit_prices` (`id`, `credits`, `price`) VALUES
+(1, 1, 249.00),
+(2, 5, 1099.00);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `ecu`
 --
 
 CREATE TABLE `ecu` (
-  `id` int(11) NOT NULL,
+  `ecu_id` int(11) NOT NULL,
   `engine_id` int(11) NOT NULL,
   `ecu_name` varchar(250) NOT NULL,
   `add_date` timestamp NOT NULL DEFAULT current_timestamp(),
@@ -125,7 +145,7 @@ CREATE TABLE `ecu` (
 -- Dumping data for table `ecu`
 --
 
-INSERT INTO `ecu` (`id`, `engine_id`, `ecu_name`, `add_date`, `status`) VALUES
+INSERT INTO `ecu` (`ecu_id`, `engine_id`, `ecu_name`, `add_date`, `status`) VALUES
 (1, 1, 'Bosch ME7.3.1', '2024-07-04 08:15:34', 1);
 
 -- --------------------------------------------------------
@@ -135,9 +155,9 @@ INSERT INTO `ecu` (`id`, `engine_id`, `ecu_name`, `add_date`, `status`) VALUES
 --
 
 CREATE TABLE `engines` (
-  `id` int(11) NOT NULL,
+  `engine_id` int(11) NOT NULL,
   `generation_id` int(11) NOT NULL,
-  `name` varchar(255) NOT NULL,
+  `engine_name` varchar(255) NOT NULL,
   `add_date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `status` int(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -146,7 +166,7 @@ CREATE TABLE `engines` (
 -- Dumping data for table `engines`
 --
 
-INSERT INTO `engines` (`id`, `generation_id`, `name`, `add_date`, `status`) VALUES
+INSERT INTO `engines` (`engine_id`, `generation_id`, `engine_name`, `add_date`, `status`) VALUES
 (1, 1, '1.6 T-Spark 105hp', '2024-07-04 07:51:31', 1),
 (2, 1, '1.6 T-Spark 120hp', '2024-07-04 07:51:31', 1),
 (3, 1, '1.9 JTD 100hp', '2024-07-04 07:51:31', 1),
@@ -214,7 +234,7 @@ INSERT INTO `generations` (`generation_id`, `model_id`, `generation_name`, `add_
 --
 
 CREATE TABLE `models` (
-  `id` int(11) NOT NULL,
+  `model_id` int(11) NOT NULL,
   `brand_id` int(11) NOT NULL,
   `model_name` varchar(100) NOT NULL,
   `add_date` timestamp NOT NULL DEFAULT current_timestamp(),
@@ -225,7 +245,7 @@ CREATE TABLE `models` (
 -- Dumping data for table `models`
 --
 
-INSERT INTO `models` (`id`, `brand_id`, `model_name`, `add_date`, `status`) VALUES
+INSERT INTO `models` (`model_id`, `brand_id`, `model_name`, `add_date`, `status`) VALUES
 (1, 1, '147', '2024-07-03 15:16:21', 1),
 (2, 1, '156', '2024-07-03 15:16:21', 1),
 (3, 1, '159', '2024-07-03 15:16:21', 1),
@@ -239,6 +259,19 @@ INSERT INTO `models` (`id`, `brand_id`, `model_name`, `add_date`, `status`) VALU
 (11, 1, 'MiTo', '2024-07-03 15:16:21', 1),
 (12, 1, 'Spider', '2024-07-03 15:16:21', 1),
 (13, 1, 'Stelvio', '2024-07-03 15:16:21', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `read_method`
+--
+
+CREATE TABLE `read_method` (
+  `id` int(11) NOT NULL,
+  `method_name` varchar(255) NOT NULL,
+  `added_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `status` int(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -262,272 +295,269 @@ CREATE TABLE `service_files` (
 --
 
 CREATE TABLE `tblcountries` (
-  `country_id` int(5) NOT NULL,
-  `iso2` char(2) DEFAULT NULL,
-  `short_name` varchar(80) NOT NULL DEFAULT '',
-  `long_name` varchar(80) NOT NULL DEFAULT '',
-  `iso3` char(3) DEFAULT NULL,
-  `numcode` varchar(6) DEFAULT NULL,
-  `un_member` varchar(12) DEFAULT NULL,
-  `calling_code` varchar(8) DEFAULT NULL,
-  `cctld` varchar(5) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+  `id` int(11) NOT NULL,
+  `short_name` varchar(255) NOT NULL,
+  `iso2` varchar(2) NOT NULL,
+  `iso3` varchar(3) NOT NULL,
+  `numcode` varchar(10) DEFAULT NULL,
+  `flag_img` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tblcountries`
 --
 
-INSERT INTO `tblcountries` (`country_id`, `iso2`, `short_name`, `long_name`, `iso3`, `numcode`, `un_member`, `calling_code`, `cctld`) VALUES
-(1, 'AF', 'Afghanistan', 'Islamic Republic of Afghanistan', 'AFG', '004', 'yes', '93', '.af'),
-(2, 'AX', 'Aland Islands', '&Aring;land Islands', 'ALA', '248', 'no', '358', '.ax'),
-(3, 'AL', 'Albania', 'Republic of Albania', 'ALB', '008', 'yes', '355', '.al'),
-(4, 'DZ', 'Algeria', 'People\'s Democratic Republic of Algeria', 'DZA', '012', 'yes', '213', '.dz'),
-(5, 'AS', 'American Samoa', 'American Samoa', 'ASM', '016', 'no', '1+684', '.as'),
-(6, 'AD', 'Andorra', 'Principality of Andorra', 'AND', '020', 'yes', '376', '.ad'),
-(7, 'AO', 'Angola', 'Republic of Angola', 'AGO', '024', 'yes', '244', '.ao'),
-(8, 'AI', 'Anguilla', 'Anguilla', 'AIA', '660', 'no', '1+264', '.ai'),
-(9, 'AQ', 'Antarctica', 'Antarctica', 'ATA', '010', 'no', '672', '.aq'),
-(10, 'AG', 'Antigua and Barbuda', 'Antigua and Barbuda', 'ATG', '028', 'yes', '1+268', '.ag'),
-(11, 'AR', 'Argentina', 'Argentine Republic', 'ARG', '032', 'yes', '54', '.ar'),
-(12, 'AM', 'Armenia', 'Republic of Armenia', 'ARM', '051', 'yes', '374', '.am'),
-(13, 'AW', 'Aruba', 'Aruba', 'ABW', '533', 'no', '297', '.aw'),
-(14, 'AU', 'Australia', 'Commonwealth of Australia', 'AUS', '036', 'yes', '61', '.au'),
-(15, 'AT', 'Austria', 'Republic of Austria', 'AUT', '040', 'yes', '43', '.at'),
-(16, 'AZ', 'Azerbaijan', 'Republic of Azerbaijan', 'AZE', '031', 'yes', '994', '.az'),
-(17, 'BS', 'Bahamas', 'Commonwealth of The Bahamas', 'BHS', '044', 'yes', '1+242', '.bs'),
-(18, 'BH', 'Bahrain', 'Kingdom of Bahrain', 'BHR', '048', 'yes', '973', '.bh'),
-(19, 'BD', 'Bangladesh', 'People\'s Republic of Bangladesh', 'BGD', '050', 'yes', '880', '.bd'),
-(20, 'BB', 'Barbados', 'Barbados', 'BRB', '052', 'yes', '1+246', '.bb'),
-(21, 'BY', 'Belarus', 'Republic of Belarus', 'BLR', '112', 'yes', '375', '.by'),
-(22, 'BE', 'Belgium', 'Kingdom of Belgium', 'BEL', '056', 'yes', '32', '.be'),
-(23, 'BZ', 'Belize', 'Belize', 'BLZ', '084', 'yes', '501', '.bz'),
-(24, 'BJ', 'Benin', 'Republic of Benin', 'BEN', '204', 'yes', '229', '.bj'),
-(25, 'BM', 'Bermuda', 'Bermuda Islands', 'BMU', '060', 'no', '1+441', '.bm'),
-(26, 'BT', 'Bhutan', 'Kingdom of Bhutan', 'BTN', '064', 'yes', '975', '.bt'),
-(27, 'BO', 'Bolivia', 'Plurinational State of Bolivia', 'BOL', '068', 'yes', '591', '.bo'),
-(28, 'BQ', 'Bonaire, Sint Eustatius and Saba', 'Bonaire, Sint Eustatius and Saba', 'BES', '535', 'no', '599', '.bq'),
-(29, 'BA', 'Bosnia and Herzegovina', 'Bosnia and Herzegovina', 'BIH', '070', 'yes', '387', '.ba'),
-(30, 'BW', 'Botswana', 'Republic of Botswana', 'BWA', '072', 'yes', '267', '.bw'),
-(31, 'BV', 'Bouvet Island', 'Bouvet Island', 'BVT', '074', 'no', 'NONE', '.bv'),
-(32, 'BR', 'Brazil', 'Federative Republic of Brazil', 'BRA', '076', 'yes', '55', '.br'),
-(33, 'IO', 'British Indian Ocean Territory', 'British Indian Ocean Territory', 'IOT', '086', 'no', '246', '.io'),
-(34, 'BN', 'Brunei', 'Brunei Darussalam', 'BRN', '096', 'yes', '673', '.bn'),
-(35, 'BG', 'Bulgaria', 'Republic of Bulgaria', 'BGR', '100', 'yes', '359', '.bg'),
-(36, 'BF', 'Burkina Faso', 'Burkina Faso', 'BFA', '854', 'yes', '226', '.bf'),
-(37, 'BI', 'Burundi', 'Republic of Burundi', 'BDI', '108', 'yes', '257', '.bi'),
-(38, 'KH', 'Cambodia', 'Kingdom of Cambodia', 'KHM', '116', 'yes', '855', '.kh'),
-(39, 'CM', 'Cameroon', 'Republic of Cameroon', 'CMR', '120', 'yes', '237', '.cm'),
-(40, 'CA', 'Canada', 'Canada', 'CAN', '124', 'yes', '1', '.ca'),
-(41, 'CV', 'Cape Verde', 'Republic of Cape Verde', 'CPV', '132', 'yes', '238', '.cv'),
-(42, 'KY', 'Cayman Islands', 'The Cayman Islands', 'CYM', '136', 'no', '1+345', '.ky'),
-(43, 'CF', 'Central African Republic', 'Central African Republic', 'CAF', '140', 'yes', '236', '.cf'),
-(44, 'TD', 'Chad', 'Republic of Chad', 'TCD', '148', 'yes', '235', '.td'),
-(45, 'CL', 'Chile', 'Republic of Chile', 'CHL', '152', 'yes', '56', '.cl'),
-(46, 'CN', 'China', 'People\'s Republic of China', 'CHN', '156', 'yes', '86', '.cn'),
-(47, 'CX', 'Christmas Island', 'Christmas Island', 'CXR', '162', 'no', '61', '.cx'),
-(48, 'CC', 'Cocos (Keeling) Islands', 'Cocos (Keeling) Islands', 'CCK', '166', 'no', '61', '.cc'),
-(49, 'CO', 'Colombia', 'Republic of Colombia', 'COL', '170', 'yes', '57', '.co'),
-(50, 'KM', 'Comoros', 'Union of the Comoros', 'COM', '174', 'yes', '269', '.km'),
-(51, 'CG', 'Congo', 'Republic of the Congo', 'COG', '178', 'yes', '242', '.cg'),
-(52, 'CK', 'Cook Islands', 'Cook Islands', 'COK', '184', 'some', '682', '.ck'),
-(53, 'CR', 'Costa Rica', 'Republic of Costa Rica', 'CRI', '188', 'yes', '506', '.cr'),
-(54, 'CI', 'Cote d\'ivoire (Ivory Coast)', 'Republic of C&ocirc;te D\'Ivoire (Ivory Coast)', 'CIV', '384', 'yes', '225', '.ci'),
-(55, 'HR', 'Croatia', 'Republic of Croatia', 'HRV', '191', 'yes', '385', '.hr'),
-(56, 'CU', 'Cuba', 'Republic of Cuba', 'CUB', '192', 'yes', '53', '.cu'),
-(57, 'CW', 'Curacao', 'Cura&ccedil;ao', 'CUW', '531', 'no', '599', '.cw'),
-(58, 'CY', 'Cyprus', 'Republic of Cyprus', 'CYP', '196', 'yes', '357', '.cy'),
-(59, 'CZ', 'Czech Republic', 'Czech Republic', 'CZE', '203', 'yes', '420', '.cz'),
-(60, 'CD', 'Democratic Republic of the Congo', 'Democratic Republic of the Congo', 'COD', '180', 'yes', '243', '.cd'),
-(61, 'DK', 'Denmark', 'Kingdom of Denmark', 'DNK', '208', 'yes', '45', '.dk'),
-(62, 'DJ', 'Djibouti', 'Republic of Djibouti', 'DJI', '262', 'yes', '253', '.dj'),
-(63, 'DM', 'Dominica', 'Commonwealth of Dominica', 'DMA', '212', 'yes', '1+767', '.dm'),
-(64, 'DO', 'Dominican Republic', 'Dominican Republic', 'DOM', '214', 'yes', '1+809, 8', '.do'),
-(65, 'EC', 'Ecuador', 'Republic of Ecuador', 'ECU', '218', 'yes', '593', '.ec'),
-(66, 'EG', 'Egypt', 'Arab Republic of Egypt', 'EGY', '818', 'yes', '20', '.eg'),
-(67, 'SV', 'El Salvador', 'Republic of El Salvador', 'SLV', '222', 'yes', '503', '.sv'),
-(68, 'GQ', 'Equatorial Guinea', 'Republic of Equatorial Guinea', 'GNQ', '226', 'yes', '240', '.gq'),
-(69, 'ER', 'Eritrea', 'State of Eritrea', 'ERI', '232', 'yes', '291', '.er'),
-(70, 'EE', 'Estonia', 'Republic of Estonia', 'EST', '233', 'yes', '372', '.ee'),
-(71, 'ET', 'Ethiopia', 'Federal Democratic Republic of Ethiopia', 'ETH', '231', 'yes', '251', '.et'),
-(72, 'FK', 'Falkland Islands (Malvinas)', 'The Falkland Islands (Malvinas)', 'FLK', '238', 'no', '500', '.fk'),
-(73, 'FO', 'Faroe Islands', 'The Faroe Islands', 'FRO', '234', 'no', '298', '.fo'),
-(74, 'FJ', 'Fiji', 'Republic of Fiji', 'FJI', '242', 'yes', '679', '.fj'),
-(75, 'FI', 'Finland', 'Republic of Finland', 'FIN', '246', 'yes', '358', '.fi'),
-(76, 'FR', 'France', 'French Republic', 'FRA', '250', 'yes', '33', '.fr'),
-(77, 'GF', 'French Guiana', 'French Guiana', 'GUF', '254', 'no', '594', '.gf'),
-(78, 'PF', 'French Polynesia', 'French Polynesia', 'PYF', '258', 'no', '689', '.pf'),
-(79, 'TF', 'French Southern Territories', 'French Southern Territories', 'ATF', '260', 'no', NULL, '.tf'),
-(80, 'GA', 'Gabon', 'Gabonese Republic', 'GAB', '266', 'yes', '241', '.ga'),
-(81, 'GM', 'Gambia', 'Republic of The Gambia', 'GMB', '270', 'yes', '220', '.gm'),
-(82, 'GE', 'Georgia', 'Georgia', 'GEO', '268', 'yes', '995', '.ge'),
-(83, 'DE', 'Germany', 'Federal Republic of Germany', 'DEU', '276', 'yes', '49', '.de'),
-(84, 'GH', 'Ghana', 'Republic of Ghana', 'GHA', '288', 'yes', '233', '.gh'),
-(85, 'GI', 'Gibraltar', 'Gibraltar', 'GIB', '292', 'no', '350', '.gi'),
-(86, 'GR', 'Greece', 'Hellenic Republic', 'GRC', '300', 'yes', '30', '.gr'),
-(87, 'GL', 'Greenland', 'Greenland', 'GRL', '304', 'no', '299', '.gl'),
-(88, 'GD', 'Grenada', 'Grenada', 'GRD', '308', 'yes', '1+473', '.gd'),
-(89, 'GP', 'Guadaloupe', 'Guadeloupe', 'GLP', '312', 'no', '590', '.gp'),
-(90, 'GU', 'Guam', 'Guam', 'GUM', '316', 'no', '1+671', '.gu'),
-(91, 'GT', 'Guatemala', 'Republic of Guatemala', 'GTM', '320', 'yes', '502', '.gt'),
-(92, 'GG', 'Guernsey', 'Guernsey', 'GGY', '831', 'no', '44', '.gg'),
-(93, 'GN', 'Guinea', 'Republic of Guinea', 'GIN', '324', 'yes', '224', '.gn'),
-(94, 'GW', 'Guinea-Bissau', 'Republic of Guinea-Bissau', 'GNB', '624', 'yes', '245', '.gw'),
-(95, 'GY', 'Guyana', 'Co-operative Republic of Guyana', 'GUY', '328', 'yes', '592', '.gy'),
-(96, 'HT', 'Haiti', 'Republic of Haiti', 'HTI', '332', 'yes', '509', '.ht'),
-(97, 'HM', 'Heard Island and McDonald Islands', 'Heard Island and McDonald Islands', 'HMD', '334', 'no', 'NONE', '.hm'),
-(98, 'HN', 'Honduras', 'Republic of Honduras', 'HND', '340', 'yes', '504', '.hn'),
-(99, 'HK', 'Hong Kong', 'Hong Kong', 'HKG', '344', 'no', '852', '.hk'),
-(100, 'HU', 'Hungary', 'Hungary', 'HUN', '348', 'yes', '36', '.hu'),
-(101, 'IS', 'Iceland', 'Republic of Iceland', 'ISL', '352', 'yes', '354', '.is'),
-(102, 'IN', 'India', 'Republic of India', 'IND', '356', 'yes', '91', '.in'),
-(103, 'ID', 'Indonesia', 'Republic of Indonesia', 'IDN', '360', 'yes', '62', '.id'),
-(104, 'IR', 'Iran', 'Islamic Republic of Iran', 'IRN', '364', 'yes', '98', '.ir'),
-(105, 'IQ', 'Iraq', 'Republic of Iraq', 'IRQ', '368', 'yes', '964', '.iq'),
-(106, 'IE', 'Ireland', 'Ireland', 'IRL', '372', 'yes', '353', '.ie'),
-(107, 'IM', 'Isle of Man', 'Isle of Man', 'IMN', '833', 'no', '44', '.im'),
-(108, 'IL', 'Israel', 'State of Israel', 'ISR', '376', 'yes', '972', '.il'),
-(109, 'IT', 'Italy', 'Italian Republic', 'ITA', '380', 'yes', '39', '.jm'),
-(110, 'JM', 'Jamaica', 'Jamaica', 'JAM', '388', 'yes', '1+876', '.jm'),
-(111, 'JP', 'Japan', 'Japan', 'JPN', '392', 'yes', '81', '.jp'),
-(112, 'JE', 'Jersey', 'The Bailiwick of Jersey', 'JEY', '832', 'no', '44', '.je'),
-(113, 'JO', 'Jordan', 'Hashemite Kingdom of Jordan', 'JOR', '400', 'yes', '962', '.jo'),
-(114, 'KZ', 'Kazakhstan', 'Republic of Kazakhstan', 'KAZ', '398', 'yes', '7', '.kz'),
-(115, 'KE', 'Kenya', 'Republic of Kenya', 'KEN', '404', 'yes', '254', '.ke'),
-(116, 'KI', 'Kiribati', 'Republic of Kiribati', 'KIR', '296', 'yes', '686', '.ki'),
-(117, 'XK', 'Kosovo', 'Republic of Kosovo', '---', '---', 'some', '381', ''),
-(118, 'KW', 'Kuwait', 'State of Kuwait', 'KWT', '414', 'yes', '965', '.kw'),
-(119, 'KG', 'Kyrgyzstan', 'Kyrgyz Republic', 'KGZ', '417', 'yes', '996', '.kg'),
-(120, 'LA', 'Laos', 'Lao People\'s Democratic Republic', 'LAO', '418', 'yes', '856', '.la'),
-(121, 'LV', 'Latvia', 'Republic of Latvia', 'LVA', '428', 'yes', '371', '.lv'),
-(122, 'LB', 'Lebanon', 'Republic of Lebanon', 'LBN', '422', 'yes', '961', '.lb'),
-(123, 'LS', 'Lesotho', 'Kingdom of Lesotho', 'LSO', '426', 'yes', '266', '.ls'),
-(124, 'LR', 'Liberia', 'Republic of Liberia', 'LBR', '430', 'yes', '231', '.lr'),
-(125, 'LY', 'Libya', 'Libya', 'LBY', '434', 'yes', '218', '.ly'),
-(126, 'LI', 'Liechtenstein', 'Principality of Liechtenstein', 'LIE', '438', 'yes', '423', '.li'),
-(127, 'LT', 'Lithuania', 'Republic of Lithuania', 'LTU', '440', 'yes', '370', '.lt'),
-(128, 'LU', 'Luxembourg', 'Grand Duchy of Luxembourg', 'LUX', '442', 'yes', '352', '.lu'),
-(129, 'MO', 'Macao', 'The Macao Special Administrative Region', 'MAC', '446', 'no', '853', '.mo'),
-(130, 'MK', 'North Macedonia', 'Republic of North Macedonia', 'MKD', '807', 'yes', '389', '.mk'),
-(131, 'MG', 'Madagascar', 'Republic of Madagascar', 'MDG', '450', 'yes', '261', '.mg'),
-(132, 'MW', 'Malawi', 'Republic of Malawi', 'MWI', '454', 'yes', '265', '.mw'),
-(133, 'MY', 'Malaysia', 'Malaysia', 'MYS', '458', 'yes', '60', '.my'),
-(134, 'MV', 'Maldives', 'Republic of Maldives', 'MDV', '462', 'yes', '960', '.mv'),
-(135, 'ML', 'Mali', 'Republic of Mali', 'MLI', '466', 'yes', '223', '.ml'),
-(136, 'MT', 'Malta', 'Republic of Malta', 'MLT', '470', 'yes', '356', '.mt'),
-(137, 'MH', 'Marshall Islands', 'Republic of the Marshall Islands', 'MHL', '584', 'yes', '692', '.mh'),
-(138, 'MQ', 'Martinique', 'Martinique', 'MTQ', '474', 'no', '596', '.mq'),
-(139, 'MR', 'Mauritania', 'Islamic Republic of Mauritania', 'MRT', '478', 'yes', '222', '.mr'),
-(140, 'MU', 'Mauritius', 'Republic of Mauritius', 'MUS', '480', 'yes', '230', '.mu'),
-(141, 'YT', 'Mayotte', 'Mayotte', 'MYT', '175', 'no', '262', '.yt'),
-(142, 'MX', 'Mexico', 'United Mexican States', 'MEX', '484', 'yes', '52', '.mx'),
-(143, 'FM', 'Micronesia', 'Federated States of Micronesia', 'FSM', '583', 'yes', '691', '.fm'),
-(144, 'MD', 'Moldava', 'Republic of Moldova', 'MDA', '498', 'yes', '373', '.md'),
-(145, 'MC', 'Monaco', 'Principality of Monaco', 'MCO', '492', 'yes', '377', '.mc'),
-(146, 'MN', 'Mongolia', 'Mongolia', 'MNG', '496', 'yes', '976', '.mn'),
-(147, 'ME', 'Montenegro', 'Montenegro', 'MNE', '499', 'yes', '382', '.me'),
-(148, 'MS', 'Montserrat', 'Montserrat', 'MSR', '500', 'no', '1+664', '.ms'),
-(149, 'MA', 'Morocco', 'Kingdom of Morocco', 'MAR', '504', 'yes', '212', '.ma'),
-(150, 'MZ', 'Mozambique', 'Republic of Mozambique', 'MOZ', '508', 'yes', '258', '.mz'),
-(151, 'MM', 'Myanmar (Burma)', 'Republic of the Union of Myanmar', 'MMR', '104', 'yes', '95', '.mm'),
-(152, 'NA', 'Namibia', 'Republic of Namibia', 'NAM', '516', 'yes', '264', '.na'),
-(153, 'NR', 'Nauru', 'Republic of Nauru', 'NRU', '520', 'yes', '674', '.nr'),
-(154, 'NP', 'Nepal', 'Federal Democratic Republic of Nepal', 'NPL', '524', 'yes', '977', '.np'),
-(155, 'NL', 'Netherlands', 'Kingdom of the Netherlands', 'NLD', '528', 'yes', '31', '.nl'),
-(156, 'NC', 'New Caledonia', 'New Caledonia', 'NCL', '540', 'no', '687', '.nc'),
-(157, 'NZ', 'New Zealand', 'New Zealand', 'NZL', '554', 'yes', '64', '.nz'),
-(158, 'NI', 'Nicaragua', 'Republic of Nicaragua', 'NIC', '558', 'yes', '505', '.ni'),
-(159, 'NE', 'Niger', 'Republic of Niger', 'NER', '562', 'yes', '227', '.ne'),
-(160, 'NG', 'Nigeria', 'Federal Republic of Nigeria', 'NGA', '566', 'yes', '234', '.ng'),
-(161, 'NU', 'Niue', 'Niue', 'NIU', '570', 'some', '683', '.nu'),
-(162, 'NF', 'Norfolk Island', 'Norfolk Island', 'NFK', '574', 'no', '672', '.nf'),
-(163, 'KP', 'North Korea', 'Democratic People\'s Republic of Korea', 'PRK', '408', 'yes', '850', '.kp'),
-(164, 'MP', 'Northern Mariana Islands', 'Northern Mariana Islands', 'MNP', '580', 'no', '1+670', '.mp'),
-(165, 'NO', 'Norway', 'Kingdom of Norway', 'NOR', '578', 'yes', '47', '.no'),
-(166, 'OM', 'Oman', 'Sultanate of Oman', 'OMN', '512', 'yes', '968', '.om'),
-(167, 'PK', 'Pakistan', 'Islamic Republic of Pakistan', 'PAK', '586', 'yes', '92', '.pk'),
-(168, 'PW', 'Palau', 'Republic of Palau', 'PLW', '585', 'yes', '680', '.pw'),
-(169, 'PS', 'Palestine', 'State of Palestine (or Occupied Palestinian Territory)', 'PSE', '275', 'some', '970', '.ps'),
-(170, 'PA', 'Panama', 'Republic of Panama', 'PAN', '591', 'yes', '507', '.pa'),
-(171, 'PG', 'Papua New Guinea', 'Independent State of Papua New Guinea', 'PNG', '598', 'yes', '675', '.pg'),
-(172, 'PY', 'Paraguay', 'Republic of Paraguay', 'PRY', '600', 'yes', '595', '.py'),
-(173, 'PE', 'Peru', 'Republic of Peru', 'PER', '604', 'yes', '51', '.pe'),
-(174, 'PH', 'Philippines', 'Republic of the Philippines', 'PHL', '608', 'yes', '63', '.ph'),
-(175, 'PN', 'Pitcairn', 'Pitcairn', 'PCN', '612', 'no', 'NONE', '.pn'),
-(176, 'PL', 'Poland', 'Republic of Poland', 'POL', '616', 'yes', '48', '.pl'),
-(177, 'PT', 'Portugal', 'Portuguese Republic', 'PRT', '620', 'yes', '351', '.pt'),
-(178, 'PR', 'Puerto Rico', 'Commonwealth of Puerto Rico', 'PRI', '630', 'no', '1+939', '.pr'),
-(179, 'QA', 'Qatar', 'State of Qatar', 'QAT', '634', 'yes', '974', '.qa'),
-(180, 'RE', 'Reunion', 'R&eacute;union', 'REU', '638', 'no', '262', '.re'),
-(181, 'RO', 'Romania', 'Romania', 'ROU', '642', 'yes', '40', '.ro'),
-(182, 'RU', 'Russia', 'Russian Federation', 'RUS', '643', 'yes', '7', '.ru'),
-(183, 'RW', 'Rwanda', 'Republic of Rwanda', 'RWA', '646', 'yes', '250', '.rw'),
-(184, 'BL', 'Saint Barthelemy', 'Saint Barth&eacute;lemy', 'BLM', '652', 'no', '590', '.bl'),
-(185, 'SH', 'Saint Helena', 'Saint Helena, Ascension and Tristan da Cunha', 'SHN', '654', 'no', '290', '.sh'),
-(186, 'KN', 'Saint Kitts and Nevis', 'Federation of Saint Christopher and Nevis', 'KNA', '659', 'yes', '1+869', '.kn'),
-(187, 'LC', 'Saint Lucia', 'Saint Lucia', 'LCA', '662', 'yes', '1+758', '.lc'),
-(188, 'MF', 'Saint Martin', 'Saint Martin', 'MAF', '663', 'no', '590', '.mf'),
-(189, 'PM', 'Saint Pierre and Miquelon', 'Saint Pierre and Miquelon', 'SPM', '666', 'no', '508', '.pm'),
-(190, 'VC', 'Saint Vincent and the Grenadines', 'Saint Vincent and the Grenadines', 'VCT', '670', 'yes', '1+784', '.vc'),
-(191, 'WS', 'Samoa', 'Independent State of Samoa', 'WSM', '882', 'yes', '685', '.ws'),
-(192, 'SM', 'San Marino', 'Republic of San Marino', 'SMR', '674', 'yes', '378', '.sm'),
-(193, 'ST', 'Sao Tome and Principe', 'Democratic Republic of S&atilde;o Tom&eacute; and Pr&iacute;ncipe', 'STP', '678', 'yes', '239', '.st'),
-(194, 'SA', 'Saudi Arabia', 'Kingdom of Saudi Arabia', 'SAU', '682', 'yes', '966', '.sa'),
-(195, 'SN', 'Senegal', 'Republic of Senegal', 'SEN', '686', 'yes', '221', '.sn'),
-(196, 'RS', 'Serbia', 'Republic of Serbia', 'SRB', '688', 'yes', '381', '.rs'),
-(197, 'SC', 'Seychelles', 'Republic of Seychelles', 'SYC', '690', 'yes', '248', '.sc'),
-(198, 'SL', 'Sierra Leone', 'Republic of Sierra Leone', 'SLE', '694', 'yes', '232', '.sl'),
-(199, 'SG', 'Singapore', 'Republic of Singapore', 'SGP', '702', 'yes', '65', '.sg'),
-(200, 'SX', 'Sint Maarten', 'Sint Maarten', 'SXM', '534', 'no', '1+721', '.sx'),
-(201, 'SK', 'Slovakia', 'Slovak Republic', 'SVK', '703', 'yes', '421', '.sk'),
-(202, 'SI', 'Slovenia', 'Republic of Slovenia', 'SVN', '705', 'yes', '386', '.si'),
-(203, 'SB', 'Solomon Islands', 'Solomon Islands', 'SLB', '090', 'yes', '677', '.sb'),
-(204, 'SO', 'Somalia', 'Somali Republic', 'SOM', '706', 'yes', '252', '.so'),
-(205, 'ZA', 'South Africa', 'Republic of South Africa', 'ZAF', '710', 'yes', '27', '.za'),
-(206, 'GS', 'South Georgia and the South Sandwich Islands', 'South Georgia and the South Sandwich Islands', 'SGS', '239', 'no', '500', '.gs'),
-(207, 'KR', 'South Korea', 'Republic of Korea', 'KOR', '410', 'yes', '82', '.kr'),
-(208, 'SS', 'South Sudan', 'Republic of South Sudan', 'SSD', '728', 'yes', '211', '.ss'),
-(209, 'ES', 'Spain', 'Kingdom of Spain', 'ESP', '724', 'yes', '34', '.es'),
-(210, 'LK', 'Sri Lanka', 'Democratic Socialist Republic of Sri Lanka', 'LKA', '144', 'yes', '94', '.lk'),
-(211, 'SD', 'Sudan', 'Republic of the Sudan', 'SDN', '729', 'yes', '249', '.sd'),
-(212, 'SR', 'Suriname', 'Republic of Suriname', 'SUR', '740', 'yes', '597', '.sr'),
-(213, 'SJ', 'Svalbard and Jan Mayen', 'Svalbard and Jan Mayen', 'SJM', '744', 'no', '47', '.sj'),
-(214, 'SZ', 'Swaziland', 'Kingdom of Swaziland', 'SWZ', '748', 'yes', '268', '.sz'),
-(215, 'SE', 'Sweden', 'Kingdom of Sweden', 'SWE', '752', 'yes', '46', '.se'),
-(216, 'CH', 'Switzerland', 'Swiss Confederation', 'CHE', '756', 'yes', '41', '.ch'),
-(217, 'SY', 'Syria', 'Syrian Arab Republic', 'SYR', '760', 'yes', '963', '.sy'),
-(218, 'TW', 'Taiwan', 'Republic of China (Taiwan)', 'TWN', '158', 'former', '886', '.tw'),
-(219, 'TJ', 'Tajikistan', 'Republic of Tajikistan', 'TJK', '762', 'yes', '992', '.tj'),
-(220, 'TZ', 'Tanzania', 'United Republic of Tanzania', 'TZA', '834', 'yes', '255', '.tz'),
-(221, 'TH', 'Thailand', 'Kingdom of Thailand', 'THA', '764', 'yes', '66', '.th'),
-(222, 'TL', 'Timor-Leste (East Timor)', 'Democratic Republic of Timor-Leste', 'TLS', '626', 'yes', '670', '.tl'),
-(223, 'TG', 'Togo', 'Togolese Republic', 'TGO', '768', 'yes', '228', '.tg'),
-(224, 'TK', 'Tokelau', 'Tokelau', 'TKL', '772', 'no', '690', '.tk'),
-(225, 'TO', 'Tonga', 'Kingdom of Tonga', 'TON', '776', 'yes', '676', '.to'),
-(226, 'TT', 'Trinidad and Tobago', 'Republic of Trinidad and Tobago', 'TTO', '780', 'yes', '1+868', '.tt'),
-(227, 'TN', 'Tunisia', 'Republic of Tunisia', 'TUN', '788', 'yes', '216', '.tn'),
-(228, 'TR', 'Turkey', 'Republic of Turkey', 'TUR', '792', 'yes', '90', '.tr'),
-(229, 'TM', 'Turkmenistan', 'Turkmenistan', 'TKM', '795', 'yes', '993', '.tm'),
-(230, 'TC', 'Turks and Caicos Islands', 'Turks and Caicos Islands', 'TCA', '796', 'no', '1+649', '.tc'),
-(231, 'TV', 'Tuvalu', 'Tuvalu', 'TUV', '798', 'yes', '688', '.tv'),
-(232, 'UG', 'Uganda', 'Republic of Uganda', 'UGA', '800', 'yes', '256', '.ug'),
-(233, 'UA', 'Ukraine', 'Ukraine', 'UKR', '804', 'yes', '380', '.ua'),
-(234, 'AE', 'United Arab Emirates', 'United Arab Emirates', 'ARE', '784', 'yes', '971', '.ae'),
-(235, 'GB', 'United Kingdom', 'United Kingdom of Great Britain and Nothern Ireland', 'GBR', '826', 'yes', '44', '.uk'),
-(236, 'US', 'United States', 'United States of America', 'USA', '840', 'yes', '1', '.us'),
-(237, 'UM', 'United States Minor Outlying Islands', 'United States Minor Outlying Islands', 'UMI', '581', 'no', 'NONE', 'NONE'),
-(238, 'UY', 'Uruguay', 'Eastern Republic of Uruguay', 'URY', '858', 'yes', '598', '.uy'),
-(239, 'UZ', 'Uzbekistan', 'Republic of Uzbekistan', 'UZB', '860', 'yes', '998', '.uz'),
-(240, 'VU', 'Vanuatu', 'Republic of Vanuatu', 'VUT', '548', 'yes', '678', '.vu'),
-(241, 'VA', 'Vatican City', 'State of the Vatican City', 'VAT', '336', 'no', '39', '.va'),
-(242, 'VE', 'Venezuela', 'Bolivarian Republic of Venezuela', 'VEN', '862', 'yes', '58', '.ve'),
-(243, 'VN', 'Vietnam', 'Socialist Republic of Vietnam', 'VNM', '704', 'yes', '84', '.vn'),
-(244, 'VG', 'Virgin Islands, British', 'British Virgin Islands', 'VGB', '092', 'no', '1+284', '.vg'),
-(245, 'VI', 'Virgin Islands, US', 'Virgin Islands of the United States', 'VIR', '850', 'no', '1+340', '.vi'),
-(246, 'WF', 'Wallis and Futuna', 'Wallis and Futuna', 'WLF', '876', 'no', '681', '.wf'),
-(247, 'EH', 'Western Sahara', 'Western Sahara', 'ESH', '732', 'no', '212', '.eh'),
-(248, 'YE', 'Yemen', 'Republic of Yemen', 'YEM', '887', 'yes', '967', '.ye'),
-(249, 'ZM', 'Zambia', 'Republic of Zambia', 'ZMB', '894', 'yes', '260', '.zm'),
-(250, 'ZW', 'Zimbabwe', 'Republic of Zimbabwe', 'ZWE', '716', 'yes', '263', '.zw');
+INSERT INTO `tblcountries` (`id`, `short_name`, `iso2`, `iso3`, `numcode`, `flag_img`) VALUES
+(1, 'Antarctica', 'AQ', 'ATA', '', 'https://flagcdn.com/w320/aq.png'),
+(2, 'Heard Island and McDonald Islands', 'HM', 'HMD', '', 'https://flagcdn.com/w320/hm.png'),
+(3, 'Canada', 'CA', 'CAN', '+1', 'https://flagcdn.com/w320/ca.png'),
+(4, 'United States', 'US', 'USA', '+1201', 'https://flagcdn.com/w320/us.png'),
+(5, 'Bahamas', 'BS', 'BHS', '+1242', 'https://flagcdn.com/w320/bs.png'),
+(6, 'Barbados', 'BB', 'BRB', '+1246', 'https://flagcdn.com/w320/bb.png'),
+(7, 'Anguilla', 'AI', 'AIA', '+1264', 'https://flagcdn.com/w320/ai.png'),
+(8, 'Antigua and Barbuda', 'AG', 'ATG', '+1268', 'https://flagcdn.com/w320/ag.png'),
+(9, 'British Virgin Islands', 'VG', 'VGB', '+1284', 'https://flagcdn.com/w320/vg.png'),
+(10, 'United States Virgin Islands', 'VI', 'VIR', '+1340', 'https://flagcdn.com/w320/vi.png'),
+(11, 'Cayman Islands', 'KY', 'CYM', '+1345', 'https://flagcdn.com/w320/ky.png'),
+(12, 'Bermuda', 'BM', 'BMU', '+1441', 'https://flagcdn.com/w320/bm.png'),
+(13, 'Grenada', 'GD', 'GRD', '+1473', 'https://flagcdn.com/w320/gd.png'),
+(14, 'Turks and Caicos Islands', 'TC', 'TCA', '+1649', 'https://flagcdn.com/w320/tc.png'),
+(15, 'Montserrat', 'MS', 'MSR', '+1664', 'https://flagcdn.com/w320/ms.png'),
+(16, 'Northern Mariana Islands', 'MP', 'MNP', '+1670', 'https://flagcdn.com/w320/mp.png'),
+(17, 'Guam', 'GU', 'GUM', '+1671', 'https://flagcdn.com/w320/gu.png'),
+(18, 'American Samoa', 'AS', 'ASM', '+1684', 'https://flagcdn.com/w320/as.png'),
+(19, 'Sint Maarten', 'SX', 'SXM', '+1721', 'https://flagcdn.com/w320/sx.png'),
+(20, 'Saint Lucia', 'LC', 'LCA', '+1758', 'https://flagcdn.com/w320/lc.png'),
+(21, 'Dominica', 'DM', 'DMA', '+1767', 'https://flagcdn.com/w320/dm.png'),
+(22, 'Saint Vincent and the Grenadines', 'VC', 'VCT', '+1784', 'https://flagcdn.com/w320/vc.png'),
+(23, 'Puerto Rico', 'PR', 'PRI', '+1787', 'https://flagcdn.com/w320/pr.png'),
+(24, 'Dominican Republic', 'DO', 'DOM', '+1809', 'https://flagcdn.com/w320/do.png'),
+(25, 'Trinidad and Tobago', 'TT', 'TTO', '+1868', 'https://flagcdn.com/w320/tt.png'),
+(26, 'Saint Kitts and Nevis', 'KN', 'KNA', '+1869', 'https://flagcdn.com/w320/kn.png'),
+(27, 'Jamaica', 'JM', 'JAM', '+1876', 'https://flagcdn.com/w320/jm.png'),
+(28, 'Egypt', 'EG', 'EGY', '+20', 'https://flagcdn.com/w320/eg.png'),
+(29, 'South Sudan', 'SS', 'SSD', '+211', 'https://flagcdn.com/w320/ss.png'),
+(30, 'Morocco', 'MA', 'MAR', '+212', 'https://flagcdn.com/w320/ma.png'),
+(31, 'Western Sahara', 'EH', 'ESH', '+2125288', 'https://flagcdn.com/w320/eh.png'),
+(32, 'Algeria', 'DZ', 'DZA', '+213', 'https://flagcdn.com/w320/dz.png'),
+(33, 'Tunisia', 'TN', 'TUN', '+216', 'https://flagcdn.com/w320/tn.png'),
+(34, 'Libya', 'LY', 'LBY', '+218', 'https://flagcdn.com/w320/ly.png'),
+(35, 'Gambia', 'GM', 'GMB', '+220', 'https://flagcdn.com/w320/gm.png'),
+(36, 'Senegal', 'SN', 'SEN', '+221', 'https://flagcdn.com/w320/sn.png'),
+(37, 'Mauritania', 'MR', 'MRT', '+222', 'https://flagcdn.com/w320/mr.png'),
+(38, 'Mali', 'ML', 'MLI', '+223', 'https://flagcdn.com/w320/ml.png'),
+(39, 'Guinea', 'GN', 'GIN', '+224', 'https://flagcdn.com/w320/gn.png'),
+(40, 'Ivory Coast', 'CI', 'CIV', '+225', 'https://flagcdn.com/w320/ci.png'),
+(41, 'Burkina Faso', 'BF', 'BFA', '+226', 'https://flagcdn.com/w320/bf.png'),
+(42, 'Niger', 'NE', 'NER', '+227', 'https://flagcdn.com/w320/ne.png'),
+(43, 'Togo', 'TG', 'TGO', '+228', 'https://flagcdn.com/w320/tg.png'),
+(44, 'Benin', 'BJ', 'BEN', '+229', 'https://flagcdn.com/w320/bj.png'),
+(45, 'Mauritius', 'MU', 'MUS', '+230', 'https://flagcdn.com/w320/mu.png'),
+(46, 'Liberia', 'LR', 'LBR', '+231', 'https://flagcdn.com/w320/lr.png'),
+(47, 'Sierra Leone', 'SL', 'SLE', '+232', 'https://flagcdn.com/w320/sl.png'),
+(48, 'Ghana', 'GH', 'GHA', '+233', 'https://flagcdn.com/w320/gh.png'),
+(49, 'Nigeria', 'NG', 'NGA', '+234', 'https://flagcdn.com/w320/ng.png'),
+(50, 'Chad', 'TD', 'TCD', '+235', 'https://flagcdn.com/w320/td.png'),
+(51, 'Central African Republic', 'CF', 'CAF', '+236', 'https://flagcdn.com/w320/cf.png'),
+(52, 'Cameroon', 'CM', 'CMR', '+237', 'https://flagcdn.com/w320/cm.png'),
+(53, 'Cape Verde', 'CV', 'CPV', '+238', 'https://flagcdn.com/w320/cv.png'),
+(54, 'São Tomé and Príncipe', 'ST', 'STP', '+239', 'https://flagcdn.com/w320/st.png'),
+(55, 'Equatorial Guinea', 'GQ', 'GNQ', '+240', 'https://flagcdn.com/w320/gq.png'),
+(56, 'Gabon', 'GA', 'GAB', '+241', 'https://flagcdn.com/w320/ga.png'),
+(57, 'Republic of the Congo', 'CG', 'COG', '+242', 'https://flagcdn.com/w320/cg.png'),
+(58, 'DR Congo', 'CD', 'COD', '+243', 'https://flagcdn.com/w320/cd.png'),
+(59, 'Angola', 'AO', 'AGO', '+244', 'https://flagcdn.com/w320/ao.png'),
+(60, 'Guinea-Bissau', 'GW', 'GNB', '+245', 'https://flagcdn.com/w320/gw.png'),
+(61, 'British Indian Ocean Territory', 'IO', 'IOT', '+246', 'https://flagcdn.com/w320/io.png'),
+(62, 'Seychelles', 'SC', 'SYC', '+248', 'https://flagcdn.com/w320/sc.png'),
+(63, 'Sudan', 'SD', 'SDN', '+249', 'https://flagcdn.com/w320/sd.png'),
+(64, 'Rwanda', 'RW', 'RWA', '+250', 'https://flagcdn.com/w320/rw.png'),
+(65, 'Ethiopia', 'ET', 'ETH', '+251', 'https://flagcdn.com/w320/et.png'),
+(66, 'Somalia', 'SO', 'SOM', '+252', 'https://flagcdn.com/w320/so.png'),
+(67, 'Djibouti', 'DJ', 'DJI', '+253', 'https://flagcdn.com/w320/dj.png'),
+(68, 'Kenya', 'KE', 'KEN', '+254', 'https://flagcdn.com/w320/ke.png'),
+(69, 'Tanzania', 'TZ', 'TZA', '+255', 'https://flagcdn.com/w320/tz.png'),
+(70, 'Uganda', 'UG', 'UGA', '+256', 'https://flagcdn.com/w320/ug.png'),
+(71, 'Burundi', 'BI', 'BDI', '+257', 'https://flagcdn.com/w320/bi.png'),
+(72, 'Mozambique', 'MZ', 'MOZ', '+258', 'https://flagcdn.com/w320/mz.png'),
+(73, 'Zambia', 'ZM', 'ZMB', '+260', 'https://flagcdn.com/w320/zm.png'),
+(74, 'Madagascar', 'MG', 'MDG', '+261', 'https://flagcdn.com/w320/mg.png'),
+(75, 'Réunion', 'RE', 'REU', '+262', 'https://flagcdn.com/w320/re.png'),
+(76, 'Mayotte', 'YT', 'MYT', '+262', 'https://flagcdn.com/w320/yt.png'),
+(77, 'French Southern and Antarctic Lands', 'TF', 'ATF', '+262', 'https://flagcdn.com/w320/tf.png'),
+(78, 'Zimbabwe', 'ZW', 'ZWE', '+263', 'https://flagcdn.com/w320/zw.png'),
+(79, 'Namibia', 'NA', 'NAM', '+264', 'https://flagcdn.com/w320/na.png'),
+(80, 'Malawi', 'MW', 'MWI', '+265', 'https://flagcdn.com/w320/mw.png'),
+(81, 'Lesotho', 'LS', 'LSO', '+266', 'https://flagcdn.com/w320/ls.png'),
+(82, 'Botswana', 'BW', 'BWA', '+267', 'https://flagcdn.com/w320/bw.png'),
+(83, 'Eswatini', 'SZ', 'SWZ', '+268', 'https://flagcdn.com/w320/sz.png'),
+(84, 'United States Minor Outlying Islands', 'UM', 'UMI', '+268', 'https://flagcdn.com/w320/um.png'),
+(85, 'Comoros', 'KM', 'COM', '+269', 'https://flagcdn.com/w320/km.png'),
+(86, 'South Africa', 'ZA', 'ZAF', '+27', 'https://flagcdn.com/w320/za.png'),
+(87, 'Saint Helena, Ascension and Tristan da Cunha', 'SH', 'SHN', '+290', 'https://flagcdn.com/w320/sh.png'),
+(88, 'Eritrea', 'ER', 'ERI', '+291', 'https://flagcdn.com/w320/er.png'),
+(89, 'Aruba', 'AW', 'ABW', '+297', 'https://flagcdn.com/w320/aw.png'),
+(90, 'Faroe Islands', 'FO', 'FRO', '+298', 'https://flagcdn.com/w320/fo.png'),
+(91, 'Greenland', 'GL', 'GRL', '+299', 'https://flagcdn.com/w320/gl.png'),
+(92, 'Greece', 'GR', 'GRC', '+30', 'https://flagcdn.com/w320/gr.png'),
+(93, 'Netherlands', 'NL', 'NLD', '+31', 'https://flagcdn.com/w320/nl.png'),
+(94, 'Belgium', 'BE', 'BEL', '+32', 'https://flagcdn.com/w320/be.png'),
+(95, 'France', 'FR', 'FRA', '+33', 'https://flagcdn.com/w320/fr.png'),
+(96, 'Spain', 'ES', 'ESP', '+34', 'https://flagcdn.com/w320/es.png'),
+(97, 'Gibraltar', 'GI', 'GIB', '+350', 'https://flagcdn.com/w320/gi.png'),
+(98, 'Portugal', 'PT', 'PRT', '+351', 'https://flagcdn.com/w320/pt.png'),
+(99, 'Luxembourg', 'LU', 'LUX', '+352', 'https://flagcdn.com/w320/lu.png'),
+(100, 'Ireland', 'IE', 'IRL', '+353', 'https://flagcdn.com/w320/ie.png'),
+(101, 'Iceland', 'IS', 'ISL', '+354', 'https://flagcdn.com/w320/is.png'),
+(102, 'Albania', 'AL', 'ALB', '+355', 'https://flagcdn.com/w320/al.png'),
+(103, 'Malta', 'MT', 'MLT', '+356', 'https://flagcdn.com/w320/mt.png'),
+(104, 'Cyprus', 'CY', 'CYP', '+357', 'https://flagcdn.com/w320/cy.png'),
+(105, 'Finland', 'FI', 'FIN', '+358', 'https://flagcdn.com/w320/fi.png'),
+(106, 'Åland Islands', 'AX', 'ALA', '+35818', 'https://flagcdn.com/w320/ax.png'),
+(107, 'Bulgaria', 'BG', 'BGR', '+359', 'https://flagcdn.com/w320/bg.png'),
+(108, 'Hungary', 'HU', 'HUN', '+36', 'https://flagcdn.com/w320/hu.png'),
+(109, 'Lithuania', 'LT', 'LTU', '+370', 'https://flagcdn.com/w320/lt.png'),
+(110, 'Latvia', 'LV', 'LVA', '+371', 'https://flagcdn.com/w320/lv.png'),
+(111, 'Estonia', 'EE', 'EST', '+372', 'https://flagcdn.com/w320/ee.png'),
+(112, 'Moldova', 'MD', 'MDA', '+373', 'https://flagcdn.com/w320/md.png'),
+(113, 'Armenia', 'AM', 'ARM', '+374', 'https://flagcdn.com/w320/am.png'),
+(114, 'Belarus', 'BY', 'BLR', '+375', 'https://flagcdn.com/w320/by.png'),
+(115, 'Andorra', 'AD', 'AND', '+376', 'https://flagcdn.com/w320/ad.png'),
+(116, 'Monaco', 'MC', 'MCO', '+377', 'https://flagcdn.com/w320/mc.png'),
+(117, 'San Marino', 'SM', 'SMR', '+378', 'https://flagcdn.com/w320/sm.png'),
+(118, 'Ukraine', 'UA', 'UKR', '+380', 'https://flagcdn.com/w320/ua.png'),
+(119, 'Serbia', 'RS', 'SRB', '+381', 'https://flagcdn.com/w320/rs.png'),
+(120, 'Montenegro', 'ME', 'MNE', '+382', 'https://flagcdn.com/w320/me.png'),
+(121, 'Kosovo', 'XK', 'UNK', '+383', 'https://flagcdn.com/w320/xk.png'),
+(122, 'Croatia', 'HR', 'HRV', '+385', 'https://flagcdn.com/w320/hr.png'),
+(123, 'Slovenia', 'SI', 'SVN', '+386', 'https://flagcdn.com/w320/si.png'),
+(124, 'Bosnia and Herzegovina', 'BA', 'BIH', '+387', 'https://flagcdn.com/w320/ba.png'),
+(125, 'North Macedonia', 'MK', 'MKD', '+389', 'https://flagcdn.com/w320/mk.png'),
+(126, 'Italy', 'IT', 'ITA', '+39', 'https://flagcdn.com/w320/it.png'),
+(127, 'Vatican City', 'VA', 'VAT', '+3906698', 'https://flagcdn.com/w320/va.png'),
+(128, 'Romania', 'RO', 'ROU', '+40', 'https://flagcdn.com/w320/ro.png'),
+(129, 'Switzerland', 'CH', 'CHE', '+41', 'https://flagcdn.com/w320/ch.png'),
+(130, 'Czechia', 'CZ', 'CZE', '+420', 'https://flagcdn.com/w320/cz.png'),
+(131, 'Slovakia', 'SK', 'SVK', '+421', 'https://flagcdn.com/w320/sk.png'),
+(132, 'Liechtenstein', 'LI', 'LIE', '+423', 'https://flagcdn.com/w320/li.png'),
+(133, 'Austria', 'AT', 'AUT', '+43', 'https://flagcdn.com/w320/at.png'),
+(134, 'Guernsey', 'GG', 'GGY', '+44', 'https://flagcdn.com/w320/gg.png'),
+(135, 'United Kingdom', 'GB', 'GBR', '+44', 'https://flagcdn.com/w320/gb.png'),
+(136, 'Isle of Man', 'IM', 'IMN', '+44', 'https://flagcdn.com/w320/im.png'),
+(137, 'Jersey', 'JE', 'JEY', '+44', 'https://flagcdn.com/w320/je.png'),
+(138, 'Denmark', 'DK', 'DNK', '+45', 'https://flagcdn.com/w320/dk.png'),
+(139, 'Sweden', 'SE', 'SWE', '+46', 'https://flagcdn.com/w320/se.png'),
+(140, 'Bouvet Island', 'BV', 'BVT', '+47', 'https://flagcdn.com/w320/bv.png'),
+(141, 'Norway', 'NO', 'NOR', '+47', 'https://flagcdn.com/w320/no.png'),
+(142, 'Svalbard and Jan Mayen', 'SJ', 'SJM', '+4779', 'https://flagcdn.com/w320/sj.png'),
+(143, 'Poland', 'PL', 'POL', '+48', 'https://flagcdn.com/w320/pl.png'),
+(144, 'Germany', 'DE', 'DEU', '+49', 'https://flagcdn.com/w320/de.png'),
+(145, 'South Georgia', 'GS', 'SGS', '+500', 'https://flagcdn.com/w320/gs.png'),
+(146, 'Falkland Islands', 'FK', 'FLK', '+500', 'https://flagcdn.com/w320/fk.png'),
+(147, 'Belize', 'BZ', 'BLZ', '+501', 'https://flagcdn.com/w320/bz.png'),
+(148, 'Guatemala', 'GT', 'GTM', '+502', 'https://flagcdn.com/w320/gt.png'),
+(149, 'El Salvador', 'SV', 'SLV', '+503', 'https://flagcdn.com/w320/sv.png'),
+(150, 'Honduras', 'HN', 'HND', '+504', 'https://flagcdn.com/w320/hn.png'),
+(151, 'Nicaragua', 'NI', 'NIC', '+505', 'https://flagcdn.com/w320/ni.png'),
+(152, 'Costa Rica', 'CR', 'CRI', '+506', 'https://flagcdn.com/w320/cr.png'),
+(153, 'Panama', 'PA', 'PAN', '+507', 'https://flagcdn.com/w320/pa.png'),
+(154, 'Saint Pierre and Miquelon', 'PM', 'SPM', '+508', 'https://flagcdn.com/w320/pm.png'),
+(155, 'Haiti', 'HT', 'HTI', '+509', 'https://flagcdn.com/w320/ht.png'),
+(156, 'Peru', 'PE', 'PER', '+51', 'https://flagcdn.com/w320/pe.png'),
+(157, 'Mexico', 'MX', 'MEX', '+52', 'https://flagcdn.com/w320/mx.png'),
+(158, 'Cuba', 'CU', 'CUB', '+53', 'https://flagcdn.com/w320/cu.png'),
+(159, 'Argentina', 'AR', 'ARG', '+54', 'https://flagcdn.com/w320/ar.png'),
+(160, 'Brazil', 'BR', 'BRA', '+55', 'https://flagcdn.com/w320/br.png'),
+(161, 'Chile', 'CL', 'CHL', '+56', 'https://flagcdn.com/w320/cl.png'),
+(162, 'Colombia', 'CO', 'COL', '+57', 'https://flagcdn.com/w320/co.png'),
+(163, 'Venezuela', 'VE', 'VEN', '+58', 'https://flagcdn.com/w320/ve.png'),
+(164, 'Saint Barthélemy', 'BL', 'BLM', '+590', 'https://flagcdn.com/w320/bl.png'),
+(165, 'Guadeloupe', 'GP', 'GLP', '+590', 'https://flagcdn.com/w320/gp.png'),
+(166, 'Saint Martin', 'MF', 'MAF', '+590', 'https://flagcdn.com/w320/mf.png'),
+(167, 'Bolivia', 'BO', 'BOL', '+591', 'https://flagcdn.com/w320/bo.png'),
+(168, 'Guyana', 'GY', 'GUY', '+592', 'https://flagcdn.com/w320/gy.png'),
+(169, 'Ecuador', 'EC', 'ECU', '+593', 'https://flagcdn.com/w320/ec.png'),
+(170, 'French Guiana', 'GF', 'GUF', '+594', 'https://flagcdn.com/w320/gf.png'),
+(171, 'Paraguay', 'PY', 'PRY', '+595', 'https://flagcdn.com/w320/py.png'),
+(172, 'Martinique', 'MQ', 'MTQ', '+596', 'https://flagcdn.com/w320/mq.png'),
+(173, 'Suriname', 'SR', 'SUR', '+597', 'https://flagcdn.com/w320/sr.png'),
+(174, 'Uruguay', 'UY', 'URY', '+598', 'https://flagcdn.com/w320/uy.png'),
+(175, 'Caribbean Netherlands', 'BQ', 'BES', '+599', 'https://flagcdn.com/w320/bq.png'),
+(176, 'Curaçao', 'CW', 'CUW', '+599', 'https://flagcdn.com/w320/cw.png'),
+(177, 'Malaysia', 'MY', 'MYS', '+60', 'https://flagcdn.com/w320/my.png'),
+(178, 'Christmas Island', 'CX', 'CXR', '+61', 'https://flagcdn.com/w320/cx.png'),
+(179, 'Cocos (Keeling) Islands', 'CC', 'CCK', '+61', 'https://flagcdn.com/w320/cc.png'),
+(180, 'Australia', 'AU', 'AUS', '+61', 'https://flagcdn.com/w320/au.png'),
+(181, 'Indonesia', 'ID', 'IDN', '+62', 'https://flagcdn.com/w320/id.png'),
+(182, 'Philippines', 'PH', 'PHL', '+63', 'https://flagcdn.com/w320/ph.png'),
+(183, 'Pitcairn Islands', 'PN', 'PCN', '+64', 'https://flagcdn.com/w320/pn.png'),
+(184, 'New Zealand', 'NZ', 'NZL', '+64', 'https://flagcdn.com/w320/nz.png'),
+(185, 'Singapore', 'SG', 'SGP', '+65', 'https://flagcdn.com/w320/sg.png'),
+(186, 'Thailand', 'TH', 'THA', '+66', 'https://flagcdn.com/w320/th.png'),
+(187, 'Timor-Leste', 'TL', 'TLS', '+670', 'https://flagcdn.com/w320/tl.png'),
+(188, 'Norfolk Island', 'NF', 'NFK', '+672', 'https://flagcdn.com/w320/nf.png'),
+(189, 'Brunei', 'BN', 'BRN', '+673', 'https://flagcdn.com/w320/bn.png'),
+(190, 'Nauru', 'NR', 'NRU', '+674', 'https://flagcdn.com/w320/nr.png'),
+(191, 'Papua New Guinea', 'PG', 'PNG', '+675', 'https://flagcdn.com/w320/pg.png'),
+(192, 'Tonga', 'TO', 'TON', '+676', 'https://flagcdn.com/w320/to.png'),
+(193, 'Solomon Islands', 'SB', 'SLB', '+677', 'https://flagcdn.com/w320/sb.png'),
+(194, 'Vanuatu', 'VU', 'VUT', '+678', 'https://flagcdn.com/w320/vu.png'),
+(195, 'Fiji', 'FJ', 'FJI', '+679', 'https://flagcdn.com/w320/fj.png'),
+(196, 'Palau', 'PW', 'PLW', '+680', 'https://flagcdn.com/w320/pw.png'),
+(197, 'Wallis and Futuna', 'WF', 'WLF', '+681', 'https://flagcdn.com/w320/wf.png'),
+(198, 'Cook Islands', 'CK', 'COK', '+682', 'https://flagcdn.com/w320/ck.png'),
+(199, 'Niue', 'NU', 'NIU', '+683', 'https://flagcdn.com/w320/nu.png'),
+(200, 'Samoa', 'WS', 'WSM', '+685', 'https://flagcdn.com/w320/ws.png'),
+(201, 'Kiribati', 'KI', 'KIR', '+686', 'https://flagcdn.com/w320/ki.png'),
+(202, 'New Caledonia', 'NC', 'NCL', '+687', 'https://flagcdn.com/w320/nc.png'),
+(203, 'Tuvalu', 'TV', 'TUV', '+688', 'https://flagcdn.com/w320/tv.png'),
+(204, 'French Polynesia', 'PF', 'PYF', '+689', 'https://flagcdn.com/w320/pf.png'),
+(205, 'Tokelau', 'TK', 'TKL', '+690', 'https://flagcdn.com/w320/tk.png'),
+(206, 'Micronesia', 'FM', 'FSM', '+691', 'https://flagcdn.com/w320/fm.png'),
+(207, 'Marshall Islands', 'MH', 'MHL', '+692', 'https://flagcdn.com/w320/mh.png'),
+(208, 'Russia', 'RU', 'RUS', '+73', 'https://flagcdn.com/w320/ru.png'),
+(209, 'Kazakhstan', 'KZ', 'KAZ', '+76', 'https://flagcdn.com/w320/kz.png'),
+(210, 'Japan', 'JP', 'JPN', '+81', 'https://flagcdn.com/w320/jp.png'),
+(211, 'South Korea', 'KR', 'KOR', '+82', 'https://flagcdn.com/w320/kr.png'),
+(212, 'Vietnam', 'VN', 'VNM', '+84', 'https://flagcdn.com/w320/vn.png'),
+(213, 'North Korea', 'KP', 'PRK', '+850', 'https://flagcdn.com/w320/kp.png'),
+(214, 'Hong Kong', 'HK', 'HKG', '+852', 'https://flagcdn.com/w320/hk.png'),
+(215, 'Macau', 'MO', 'MAC', '+853', 'https://flagcdn.com/w320/mo.png'),
+(216, 'Cambodia', 'KH', 'KHM', '+855', 'https://flagcdn.com/w320/kh.png'),
+(217, 'Laos', 'LA', 'LAO', '+856', 'https://flagcdn.com/w320/la.png'),
+(218, 'China', 'CN', 'CHN', '+86', 'https://flagcdn.com/w320/cn.png'),
+(219, 'Bangladesh', 'BD', 'BGD', '+880', 'https://flagcdn.com/w320/bd.png'),
+(220, 'Taiwan', 'TW', 'TWN', '+886', 'https://flagcdn.com/w320/tw.png'),
+(221, 'Turkey', 'TR', 'TUR', '+90', 'https://flagcdn.com/w320/tr.png'),
+(222, 'India', 'IN', 'IND', '+91', 'https://flagcdn.com/w320/in.png'),
+(223, 'Pakistan', 'PK', 'PAK', '+92', 'https://flagcdn.com/w320/pk.png'),
+(224, 'Afghanistan', 'AF', 'AFG', '+93', 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Flag_of_the_Taliban.svg/320px-Flag_of_the_Taliban.svg.png'),
+(225, 'Sri Lanka', 'LK', 'LKA', '+94', 'https://flagcdn.com/w320/lk.png'),
+(226, 'Myanmar', 'MM', 'MMR', '+95', 'https://flagcdn.com/w320/mm.png'),
+(227, 'Maldives', 'MV', 'MDV', '+960', 'https://flagcdn.com/w320/mv.png'),
+(228, 'Lebanon', 'LB', 'LBN', '+961', 'https://flagcdn.com/w320/lb.png'),
+(229, 'Jordan', 'JO', 'JOR', '+962', 'https://flagcdn.com/w320/jo.png'),
+(230, 'Syria', 'SY', 'SYR', '+963', 'https://flagcdn.com/w320/sy.png'),
+(231, 'Iraq', 'IQ', 'IRQ', '+964', 'https://flagcdn.com/w320/iq.png'),
+(232, 'Kuwait', 'KW', 'KWT', '+965', 'https://flagcdn.com/w320/kw.png'),
+(233, 'Saudi Arabia', 'SA', 'SAU', '+966', 'https://flagcdn.com/w320/sa.png'),
+(234, 'Yemen', 'YE', 'YEM', '+967', 'https://flagcdn.com/w320/ye.png'),
+(235, 'Oman', 'OM', 'OMN', '+968', 'https://flagcdn.com/w320/om.png'),
+(236, 'Palestine', 'PS', 'PSE', '+970', 'https://flagcdn.com/w320/ps.png'),
+(237, 'United Arab Emirates', 'AE', 'ARE', '+971', 'https://flagcdn.com/w320/ae.png'),
+(238, 'Israel', 'IL', 'ISR', '+972', 'https://flagcdn.com/w320/il.png'),
+(239, 'Bahrain', 'BH', 'BHR', '+973', 'https://flagcdn.com/w320/bh.png'),
+(240, 'Qatar', 'QA', 'QAT', '+974', 'https://flagcdn.com/w320/qa.png'),
+(241, 'Bhutan', 'BT', 'BTN', '+975', 'https://flagcdn.com/w320/bt.png'),
+(242, 'Mongolia', 'MN', 'MNG', '+976', 'https://flagcdn.com/w320/mn.png'),
+(243, 'Nepal', 'NP', 'NPL', '+977', 'https://flagcdn.com/w320/np.png'),
+(244, 'Iran', 'IR', 'IRN', '+98', 'https://flagcdn.com/w320/ir.png'),
+(245, 'Tajikistan', 'TJ', 'TJK', '+992', 'https://flagcdn.com/w320/tj.png'),
+(246, 'Turkmenistan', 'TM', 'TKM', '+993', 'https://flagcdn.com/w320/tm.png'),
+(247, 'Azerbaijan', 'AZ', 'AZE', '+994', 'https://flagcdn.com/w320/az.png'),
+(248, 'Georgia', 'GE', 'GEO', '+995', 'https://flagcdn.com/w320/ge.png'),
+(249, 'Kyrgyzstan', 'KG', 'KGZ', '+996', 'https://flagcdn.com/w320/kg.png'),
+(250, 'Uzbekistan', 'UZ', 'UZB', '+998', 'https://flagcdn.com/w320/uz.png');
 
 -- --------------------------------------------------------
 
@@ -543,12 +573,14 @@ CREATE TABLE `users` (
   `email` varchar(100) NOT NULL,
   `password` varchar(255) NOT NULL,
   `phone` varchar(100) DEFAULT NULL,
-  `country` int(11) DEFAULT NULL,
-  `account_type` varchar(20) DEFAULT NULL,
+  `country` varchar(255) DEFAULT NULL,
+  `profile_pic` varchar(255) DEFAULT NULL,
   `city` varchar(25) DEFAULT NULL,
   `street` varchar(100) DEFAULT NULL,
   `postcode` varchar(20) NOT NULL,
   `role_as` int(1) NOT NULL DEFAULT 0 COMMENT '1 = Admin,0 = User',
+  `verify_token` varchar(255) NOT NULL,
+  `verify_status` tinyint(2) NOT NULL DEFAULT 0 COMMENT '0 = not verified, 1 = verified',
   `added_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -556,9 +588,9 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `fname`, `lname`, `username`, `email`, `password`, `phone`, `country`, `account_type`, `city`, `street`, `postcode`, `role_as`, `added_at`) VALUES
-(1, 'Admin', NULL, 'admin@gmail.com', 'admin@gmail.com', 'admin', '+923156154630', NULL, NULL, NULL, NULL, '', 1, '2024-09-01 21:23:36'),
-(5, 'User', NULL, 'user', 'user@gmail.com', 'user', '0436477955', 14, 'personal', 'Miranda', '1/19-21 Miranda Road', '2228', 0, '2024-09-01 21:23:36');
+INSERT INTO `users` (`id`, `fname`, `lname`, `username`, `email`, `password`, `phone`, `country`, `profile_pic`, `city`, `street`, `postcode`, `role_as`, `verify_token`, `verify_status`, `added_at`) VALUES
+(7, 'Adnan', 'Rahim', 'adnan', 'adnankaka.786110@gmail.com', '$2y$10$c5Mf1YLRaz9hItUhEy0uP.RMJBAgD6J7hyutMlTEJgqEKryu7lftG', '02032948394', NULL, NULL, NULL, NULL, '', 1, '221bb9928474600ca58f55ffce5967d6', 1, '2024-09-05 20:40:59'),
+(8, 'Adnan', 'Rahim', 'adnan1', 'arkaka0092@gmail.com', '$2y$10$XtY7Vk83jWuF4hJLFDEmLuGvq99i6MGajOD9v2Jw8DerEE8M7bMoy', '02032948394', 'South Georgia', 'uploads/profile_pics/profile_66e084b28fbd30.96024971.jpg', 'Karachi', 'central jacob', '75520', 0, '5c1274f604813d971ec70705d82840f2', 1, '2024-09-07 18:53:44');
 
 --
 -- Indexes for dumped tables
@@ -571,17 +603,23 @@ ALTER TABLE `brands`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `credit_prices`
+--
+ALTER TABLE `credit_prices`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `ecu`
 --
 ALTER TABLE `ecu`
-  ADD PRIMARY KEY (`id`),
+  ADD PRIMARY KEY (`ecu_id`),
   ADD KEY `engine_id` (`engine_id`);
 
 --
 -- Indexes for table `engines`
 --
 ALTER TABLE `engines`
-  ADD PRIMARY KEY (`id`),
+  ADD PRIMARY KEY (`engine_id`),
   ADD KEY `generation_id` (`generation_id`);
 
 --
@@ -601,8 +639,14 @@ ALTER TABLE `generations`
 -- Indexes for table `models`
 --
 ALTER TABLE `models`
-  ADD PRIMARY KEY (`id`),
+  ADD PRIMARY KEY (`model_id`),
   ADD KEY `brand_id` (`brand_id`);
+
+--
+-- Indexes for table `read_method`
+--
+ALTER TABLE `read_method`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `service_files`
@@ -614,7 +658,7 @@ ALTER TABLE `service_files`
 -- Indexes for table `tblcountries`
 --
 ALTER TABLE `tblcountries`
-  ADD PRIMARY KEY (`country_id`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `users`
@@ -633,16 +677,22 @@ ALTER TABLE `brands`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
 
 --
+-- AUTO_INCREMENT for table `credit_prices`
+--
+ALTER TABLE `credit_prices`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
 -- AUTO_INCREMENT for table `ecu`
 --
 ALTER TABLE `ecu`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `ecu_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `engines`
 --
 ALTER TABLE `engines`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `engine_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `file_service`
@@ -660,7 +710,13 @@ ALTER TABLE `generations`
 -- AUTO_INCREMENT for table `models`
 --
 ALTER TABLE `models`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `model_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+
+--
+-- AUTO_INCREMENT for table `read_method`
+--
+ALTER TABLE `read_method`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `service_files`
@@ -672,13 +728,13 @@ ALTER TABLE `service_files`
 -- AUTO_INCREMENT for table `tblcountries`
 --
 ALTER TABLE `tblcountries`
-  MODIFY `country_id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=251;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=251;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- Constraints for dumped tables
@@ -688,7 +744,7 @@ ALTER TABLE `users`
 -- Constraints for table `ecu`
 --
 ALTER TABLE `ecu`
-  ADD CONSTRAINT `engine_id` FOREIGN KEY (`engine_id`) REFERENCES `engines` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `engine_id` FOREIGN KEY (`engine_id`) REFERENCES `engines` (`engine_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `engines`
@@ -700,7 +756,7 @@ ALTER TABLE `engines`
 -- Constraints for table `generations`
 --
 ALTER TABLE `generations`
-  ADD CONSTRAINT `model_id` FOREIGN KEY (`model_id`) REFERENCES `models` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `model_id` FOREIGN KEY (`model_id`) REFERENCES `models` (`model_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `models`

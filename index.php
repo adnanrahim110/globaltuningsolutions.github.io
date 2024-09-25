@@ -1,7 +1,7 @@
 <?php
 $title = "Home";
- include "includes/head.php"; 
- ?>
+include "includes/head.php";
+?>
 
 <body>
   <?php include "includes/navbar.php"; ?>
@@ -26,14 +26,14 @@ $title = "Home";
                   commodo
                   consequat.
                 </p>
-                <a href="#" class="main-btn btn">Get Started</a>
+                <a href="#get-started" class="main-btn btn">Get Started</a>
               </div>
             </div>
           </div>
         </div>
       </div>
     </section>
-    <section class="cta-sec">
+    <section class="cta-sec" id="get-started">
       <div class="cta_1">
         <div class="container">
           <div class="row justify-content-center align-items-center">
@@ -100,7 +100,7 @@ $title = "Home";
               Only registered users have access to our services and tuning files.
             </p>
           </a>
-          <a href="user/buy-credits.php" class="access-item">
+          <a href="user/buy-credits" class="access-item">
             <div class="acc_item-icon">
               <svg xmlns="http://www.w3.org/2000/svg" width="82" height="82" viewBox="0 0 82 82">
                 <g fill-rule="evenodd">
@@ -118,7 +118,7 @@ $title = "Home";
               Buy credits safely with Paypal. With credits you can get our services and tuning files.
             </p>
           </a>
-          <a href="user/upload-files.php" class="access-item">
+          <a href="user/upload-files" class="access-item">
             <div class="acc_item-icon">
               <svg xmlns="http://www.w3.org/2000/svg" width="100" height="73" viewBox="0 0 100 73">
                 <g fill-rule="evenodd">
@@ -135,7 +135,7 @@ $title = "Home";
               You can upload your tuning file straight to our server. Safe and easy.
             </p>
           </a>
-          <a href="user/download-files.php" class="access-item">
+          <a href="user/download-files" class="access-item">
             <div class="acc_item-icon">
               <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="82" height="82"
                 viewBox="0 0 82 82">

@@ -1,0 +1,30 @@
+:root {
+  --primary-color: #48b2c2;
+  --secondary-color: #113237;
+  --dark-color: #17161E;
+  --body-color: #464255;
+  --desc-color: #3B3741;
+  --sec-color: #A3A3A3;
+  --gray-color: #ECEAF3;
+  --grayTwo-color: #D0D6DE;
+  --grayThree-color: #B9BBBD;
+  --section-color: #F3F2F7;
+  --sectionTwo-color: #F5F4F9;
+  --sectionThree-color: #fcfcfc;
+  --light-color: #f2f7f9;
+  --white-color: #ffffff;
+  --success-color: #4caf50;
+  --warning-color: #f39c12;
+  --danger-color: #e74c3c;
+  --pink-color: #ff68b5;
+  --info-color: #17a2b8;
+  --tertiary-color: #EF9A91;
+  --quatinery-color: #F1E6B9;
+  --dark-color-transparent: #17161E26;
+  --primary-color-transparent: #48b2c226;
+  --success-color-transparent: #4caf5026;
+  --warning-color-transparent: #f39c1226;
+  --info-color-transparent: #17a2b826;
+  --danger-color-transparent: #e74c3c26;
+  --poppins: 'Poppins', sans-serif;
+}

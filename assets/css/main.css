@@ -1,20 +1,21 @@
 :root {
-  --primary-color: #D2042D;
-  --secondary-color: #4e0110;
-  --p-rgba-1: rgba(210, 4, 45, 0.1);
-  --p-rgba-2: rgba(210, 4, 45, 0.2);
-  --p-rgba-3: rgba(210, 4, 45, 0.3);
-  --p-rgba-4: rgba(210, 4, 45, 0.4);
-  --p-rgba-5: rgba(210, 4, 45, 0.5);
-  --p-rgba-6: rgba(210, 4, 45, 0.6);
-  --p-rgba-7: rgba(210, 4, 45, 0.7);
-  --p-rgba-8: rgba(210, 4, 45, 0.8);
-  --p-rgba-9: rgba(210, 4, 45, 0.9);
-  --success-color: #0e1402;
-  --caution-color: #f1cb27;
-  --danger-color: #070002;
-  --info-color: #093ce6;
+  --primary-color: #48b2c2;
+  --secondary-color: #113237;
+  --p-rgba-1: rgba(72, 178, 194, 0.1);
+  --p-rgba-2: rgba(71, 178, 194, 0.2);
+  --p-rgba-3: rgba(71, 178, 194, 0.3);
+  --p-rgba-4: rgba(71, 178, 194, 0.4);
+  --p-rgba-5: rgba(71, 178, 194, 0.5);
+  --p-rgba-6: rgba(71, 178, 194, 0.6);
+  --p-rgba-7: rgba(71, 178, 194, 0.7);
+  --p-rgba-8: rgba(71, 178, 194, 0.8);
+  --p-rgba-9: rgba(71, 178, 194, 0.9);
   --dark-color: #090909;
+  --info-color: #17a2b8;
+  --success-color: #4caf50;
+  --light-color: #f2f7f9;
+  --danger-color: #e74c3c;
+  --warning-color: #f39c12;
 
   --primary-font: 'Roboto', sans-serif;
   --secondary-font: 'Open Sans', sans-serif;
@@ -211,6 +212,18 @@ ul {
 
 /* NAVBAR */
 
+/* sticky nav */
+
+.navbar.sticky {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  background-color: var(--dark-color);
+  border-bottom: 1px solid var(--p-rgba-2);
+}
+
 .navbar {
   position: absolute;
   top: 0;
@@ -251,7 +264,7 @@ ul {
 
 .navbar-nav .nav-link:hover::before,
 .navbar-nav .nav-link.active::before,
-.navbar-nav .nav-link.show::before  {
+.navbar-nav .nav-link.show::before {
   transform: translateX(0);
 }
 
@@ -311,6 +324,7 @@ ul {
 .about_page {
   background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.7) 50%, var(--dark-color) 100%), url(../images/about-bg.jpg);
 }
+
 .service_page {
   background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.7) 50%, var(--dark-color) 100%), url(../images/services-bg.jpg);
 }
@@ -346,7 +360,7 @@ ul {
 }
 
 .page_active:hover {
-  color: #8e0e27;
+  color: var(--secondary-color);
 }
 
 .hero-sec {
@@ -1153,114 +1167,197 @@ input.form-control {
   font-size: 14px;
 }
 
-.dtc-form .form-arrow {
-  position: absolute;
-  top: 0.65rem;
-  right: 0.5rem;
-  z-index: 10;
-  font-size: 1.35rem;
-  color: var(--dark-color);
+/* Dropdown select */
+.dtc-form select.srch-slct {
+  display: none !important;
 }
 
-.dtc-form .dropdown {
-  position: relative;
-}
-
-.dtc-form .dropdown-select {
-  position: relative;
-  font-family: inherit;
-  font-size: 1rem;
-  font-weight: 400;
-  line-height: 1.2;
-  cursor: pointer;
-  user-select: none;
-  width: 100%;
-  height: 40px;
-  padding: 0.75rem 1.25rem;
-  border: none;
-  outline: none;
+.dropdown-select {
+  background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0) 100%);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#40FFFFFF', endColorstr='#00FFFFFF', GradientType=0);
+  background-color: #fff;
   border-radius: 0;
-  color: var(--color-black);
-  background-clip: padding-box;
-  background-color: var(--color-white);
-  box-shadow: var(--shadow-medium);
-  transition: all 0.3s ease-in-out;
+  border: solid 1px #000;
+  box-shadow: 0px 2px 5px 0px rgba(155, 155, 155, 0.5);
+  box-sizing: border-box;
+  cursor: pointer;
+  display: block;
+  float: left;
+  font-size: 14px;
+  font-weight: normal;
+  height: 40px;
+  line-height: 40px;
+  outline: none;
+  padding-left: 18px;
+  padding-right: 30px;
+  position: relative;
+  text-align: left !important;
+  transition: all 0.2s ease-in-out;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  white-space: nowrap;
+  width: auto;
+  color: #454545;
 }
 
-.dtc-form .dropdown-menu {
+.dropdown-select:focus {
+  background-color: #fff;
+}
+
+.dropdown-select:hover {
+  background-color: #fff;
+}
+
+.dropdown-select:active,
+.dropdown-select.open {
+  background-color: #fff !important;
+  border-color: #bbb;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05) inset;
+}
+
+.dropdown-select:after {
+  height: 0;
+  width: 0;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 4px solid #777;
+  -webkit-transform: origin(50% 20%);
+  transform: origin(50% 20%);
+  transition: all 0.125s ease-in-out;
+  content: '';
+  display: block;
+  margin-top: -2px;
+  pointer-events: none;
   position: absolute;
-  display: none;
+  right: 10px;
+  top: 50%;
+}
+
+.dropdown-select.open:after {
+  -webkit-transform: rotate(-180deg);
+  transform: rotate(-180deg);
+}
+
+.dropdown-select.open .list {
+  -webkit-transform: scale(1);
+  transform: scale(1);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.dropdown-select.open .option {
+  cursor: pointer;
+}
+
+.dropdown-select.wide {
+  width: 100%;
+}
+
+.dropdown-select.wide .list {
+  left: 0 !important;
+  right: 0 !important;
+}
+
+.dropdown-select .list {
+  box-sizing: border-box;
+  transition: all 0.15s cubic-bezier(0.25, 0, 0.25, 1.75), opacity 0.1s linear;
+  -webkit-transform: scale(0.75);
+  transform: scale(0.75);
+  -webkit-transform-origin: 50% 0;
+  transform-origin: 50% 0;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.09);
+  background-color: #fff;
+  border-radius: 0px;
+  margin-top: 4px;
+  padding: 3px 0;
+  opacity: 0;
+  overflow: hidden;
+  pointer-events: none;
+  position: absolute;
   top: 100%;
   left: 0;
-  width: 100%;
-  z-index: 10;
-  border-radius: 0;
-  background-color: var(--color-white);
-  box-shadow: var(--shadow-large);
-  transition: all 0.3s ease-in-out;
+  z-index: 999;
+  max-height: 250px;
+  overflow: auto;
+  border: 1px solid #ddd;
 }
 
-.dtc-form .dropdown-menu-inner {
-  max-height: 16rem;
-  overflow-y: scroll;
-  overflow-x: hidden;
+.dropdown-select .list:hover .option:not(:hover) {
+  background-color: transparent !important;
 }
 
-.dtc-form .dropdown-menu-inner::-webkit-scrollbar {
-  width: 5px;
-  height: auto;
+.dropdown-select .dd-search {
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0.5rem;
 }
 
-.dtc-form .dropdown-menu-inner::-webkit-scrollbar-thumb {
-  border-radius: 0.25rem;
-  background-color: var(--color-greys);
-  box-shadow: var(--shadow-small);
+.dropdown-select .dd-searchbox {
+  width: 90%;
+  padding: 0.5rem;
+  border: 1px solid #999;
+  border-color: #999;
+  border-radius: 4px;
+  outline: none;
 }
 
-.dtc-form .dropdown-menu-item {
-  font-family: inherit;
-  font-size: 1rem;
-  font-weight: normal;
-  line-height: inherit;
-  cursor: pointer;
-  user-select: none;
-  padding: 0.65rem 1.25rem;
-  background-color: var(--color-white);
+.dropdown-select .dd-searchbox:focus {
+  border-color: #12CBC4;
+}
+
+.dropdown-select .list ul {
+  padding: 0;
+}
+
+.dropdown-select .option {
+  cursor: default;
+  font-weight: 400;
+  line-height: 40px;
+  outline: none;
+  padding-left: 18px;
+  padding-right: 29px;
+  text-align: left;
+  transition: all 0.2s;
+  list-style: none;
+}
+
+.dropdown-select .option:hover,
+.dropdown-select .option:focus {
+  background-color: #f6f6f6 !important;
+}
+
+.dropdown-select .option.selected {
+  font-weight: 600;
+  color: #12cbc4;
+}
+
+.dropdown-select .option.selected:focus {
+  background: #f6f6f6;
+}
+
+.dropdown-select a {
+  color: #000000;
+  text-decoration: none;
   transition: all 0.2s ease-in-out;
 }
 
-.dtc-form .dropdown-menu-item:hover {
-  color: var(--color-black);
-  background-color: var(--color-greys);
+.dropdown-select a:hover {
+  color: #666;
 }
 
-.dtc-form .dropdown-menu-item.is-select,
-.dtc-form .dropdown-menu-item.is-select:hover {
-  color: var(--color-white);
-  background-color: var(--primary-color);
-}
+/* Dropdown select */
 
-.dtc-form .dropdown-menu-search {
-  display: block;
-  font-family: inherit;
-  font-size: 1rem;
-  font-weight: 400;
-  line-height: 1.5;
-  width: 100%;
-  height: auto;
-  padding: 0.65rem 1.25rem;
-  border: none;
-  outline: none;
-  color: var(--color-black);
-  background-clip: padding-box;
-  background-color: var(--color-light);
-}
 
 .dtc-table.table {
   margin-top: 50px;
   background-color: transparent;
-  border-collapse:separate;
-  border-spacing:0 10px;
+  border-collapse: separate;
+  border-spacing: 0 10px;
 }
 
 .dtc-table .sec-heading {
@@ -1284,11 +1381,12 @@ input.form-control {
 .dtc-table tr {
   background-color: #242424;
 }
+
 .dtc-table tr.heading {
   background-color: transparent;
 }
 
- .dtc-form .label-custom {
+.dtc-form .label-custom {
   font-size: 15px;
   margin-bottom: 0;
 }
